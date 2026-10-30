@@ -25,6 +25,7 @@ export function initFinishes({ reduce }) {
   document.querySelectorAll('input[name="finish"]').forEach(input => {
     input.addEventListener("change", () => {
       root.dataset.finish = input.value;
+      document.dispatchEvent(new CustomEvent("finishchange", { detail: input.value }));
       if (!reduce) rollIn();
     });
   });

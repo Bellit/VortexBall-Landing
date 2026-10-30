@@ -9,7 +9,7 @@ const N = 13;          // exposiciones
 const FLIGHT = 1.12;   // segundos de vuelo
 const P0 = [220, 486], C = [800, -100], P2 = [1398, 338];
 const SHOWN_AT_START = 3;
-const LATENT = .07;    // imagen latente: las exposiciones futuras ya se intuyen en la placa
+const LATENT = .05;    // imagen latente: las exposiciones futuras ya se intuyen en la placa
 
 export function initShot({ reduce }) {
   const plate = document.getElementById("shotPlate");

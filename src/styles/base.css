@@ -124,6 +124,10 @@ em { font-style: normal; color: var(--leather); }
 
 .halo { mix-blend-mode: screen; pointer-events: none; }
 
+/* capa 3D encima de una placa SVG: el balón SVG queda solo como guía invisible */
+.ball3d { position: absolute; pointer-events: none; }
+.has-3d .b3d > use { visibility: hidden; }
+
 /* intro: el primer pantallazo espera a revelarse */
 .intro .hero-copy h1 { visibility: hidden; }
 .intro .hero-copy p, .intro .hero-copy .btn, .intro .nav, .intro .readout { opacity: 0; }

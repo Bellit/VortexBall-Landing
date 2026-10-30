@@ -44,6 +44,9 @@ export function flash(target) {
       { opacity: .95, scale: .45, svgOrigin: `${cx} ${cy}` },
       { opacity: 0, scale: 1.2, svgOrigin: `${cx} ${cy}`, duration: .9, ease: "expo.out", onComplete: () => halo.remove() });
   }
+  // el balón 3D, si lo hay, lee este brillo para encenderse con el flash
+  target.glow = { v: 1 };
+  gsap.to(target.glow, { v: 0, duration: .7, ease: "expo.out" });
   return gsap.fromTo(target,
     { filter: "brightness(1.8)" },
     { filter: "brightness(1)", duration: .6, ease: "expo.out", overwrite: "auto" });

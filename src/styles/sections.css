@@ -117,7 +117,7 @@
   gap: clamp(32px, 6vw, 96px); max-width: 1400px; margin: 0 auto;
   padding: var(--section-y) var(--gutter);
 }
-.finishes-ball { justify-self: center; width: min(100%, 640px); }
+.finishes-ball { justify-self: center; width: min(100%, 640px); position: relative; }
 .finishes-ball svg { width: 100%; height: auto; overflow: visible; }
 .finishes-ball .contact { fill: #000; opacity: .55; }
 .finishes-ball .floor.thin { stroke-width: .3; }

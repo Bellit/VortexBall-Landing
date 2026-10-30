@@ -24,7 +24,7 @@ export function playIntro(shot) {
       gsap.set([h1, ...rest, ...chrome], { clearProps: "opacity,visibility,transform" });
     },
   })
-    .fromTo("#shotPlate",
+    .fromTo("#shotPlate, #tiro canvas.ball3d",
       { filter: "brightness(.06) contrast(1.6) sepia(.5)" },
       { filter: "brightness(1) contrast(1) sepia(0)", duration: 1.5, ease: "power2.out", clearProps: "filter" }, 0)
     .add(shot.intro(), .45)

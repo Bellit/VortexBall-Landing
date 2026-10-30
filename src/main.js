@@ -44,9 +44,19 @@ initSessions(opts);
 initFinishes(opts);
 initWaitlist();
 
+// El balón 3D (Three.js) se carga aparte para no frenar el resto de la página.
+// Si no llega en 1,5 s o no hay WebGL, la página sigue con los balones SVG.
+const ball3d = import("./js/ball3d.js")
+  .then(({ initBall3D }) => initBall3D([
+    [document.getElementById("shotPlate"), "#exposures > g"],
+    [document.querySelector(".finishes-ball svg"), "#finishBall, #finishGhosts > g"],
+  ]))
+  .catch(() => null);
+const atMost = ms => new Promise(r => setTimeout(r, ms));
+
 // Partir titulares en líneas exige medir el texto con su fuente real:
 // por eso las máscaras y la intro esperan a que las fuentes estén listas.
-document.fonts.ready.then(() => {
+Promise.all([document.fonts.ready, Promise.race([ball3d, atMost(1500)])]).then(() => {
   initHeadingReveals(opts);
   playIntro(shot);
   ScrollTrigger.refresh();
