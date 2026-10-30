@@ -1,0 +1,476 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-30T10:23:53.702Z",
+  "title": "Design System: VORTEX",
+  "extensions": {
+    "colorMeta": {
+      "albumen": {
+        "role": "neutral",
+        "displayName": "Albúmina",
+        "canonical": "oklch(20.6% 0.014 61.8)",
+        "tonalRamp": [
+          "oklch(15% 0.007 61.8)",
+          "oklch(26% 0.007 61.8)",
+          "oklch(37% 0.014 61.8)",
+          "oklch(48% 0.014 61.8)",
+          "oklch(59% 0.014 61.8)",
+          "oklch(70% 0.014 61.8)",
+          "oklch(82% 0.014 61.8)",
+          "oklch(95% 0.007 61.8)"
+        ]
+      },
+      "albumen-2": {
+        "role": "neutral",
+        "displayName": "Albúmina velada",
+        "canonical": "oklch(24.2% 0.018 63.0)",
+        "tonalRamp": [
+          "oklch(15% 0.009 63.0)",
+          "oklch(26% 0.009 63.0)",
+          "oklch(37% 0.018 63.0)",
+          "oklch(48% 0.018 63.0)",
+          "oklch(59% 0.018 63.0)",
+          "oklch(70% 0.018 63.0)",
+          "oklch(82% 0.018 63.0)",
+          "oklch(95% 0.009 63.0)"
+        ]
+      },
+      "silver": {
+        "role": "neutral",
+        "displayName": "Tinta plata",
+        "canonical": "oklch(85.8% 0.023 80.7)",
+        "tonalRamp": [
+          "oklch(15% 0.011 80.7)",
+          "oklch(26% 0.011 80.7)",
+          "oklch(37% 0.023 80.7)",
+          "oklch(48% 0.023 80.7)",
+          "oklch(59% 0.023 80.7)",
+          "oklch(70% 0.023 80.7)",
+          "oklch(82% 0.023 80.7)",
+          "oklch(95% 0.011 80.7)"
+        ]
+      },
+      "silver-dim": {
+        "role": "neutral",
+        "displayName": "Plata apagada",
+        "canonical": "oklch(68.4% 0.029 80.2)",
+        "tonalRamp": [
+          "oklch(15% 0.014 80.2)",
+          "oklch(26% 0.014 80.2)",
+          "oklch(37% 0.029 80.2)",
+          "oklch(48% 0.029 80.2)",
+          "oklch(59% 0.029 80.2)",
+          "oklch(70% 0.029 80.2)",
+          "oklch(82% 0.029 80.2)",
+          "oklch(95% 0.014 80.2)"
+        ]
+      },
+      "leather": {
+        "role": "primary",
+        "displayName": "Cuero de balón",
+        "canonical": "oklch(63.6% 0.183 40.3)",
+        "tonalRamp": [
+          "oklch(15% 0.092 40.3)",
+          "oklch(26% 0.092 40.3)",
+          "oklch(37% 0.183 40.3)",
+          "oklch(48% 0.183 40.3)",
+          "oklch(59% 0.183 40.3)",
+          "oklch(70% 0.183 40.3)",
+          "oklch(82% 0.183 40.3)",
+          "oklch(95% 0.092 40.3)"
+        ]
+      },
+      "leather-hover": {
+        "role": "primary",
+        "displayName": "Cuero encendido",
+        "canonical": "oklch(68.0% 0.180 42.5)",
+        "tonalRamp": [
+          "oklch(15% 0.090 42.5)",
+          "oklch(26% 0.090 42.5)",
+          "oklch(37% 0.180 42.5)",
+          "oklch(48% 0.180 42.5)",
+          "oklch(59% 0.180 42.5)",
+          "oklch(70% 0.180 42.5)",
+          "oklch(82% 0.180 42.5)",
+          "oklch(95% 0.090 42.5)"
+        ]
+      },
+      "ball-hi": {
+        "role": "tertiary",
+        "displayName": "Luz del balón",
+        "canonical": "oklch(70.8% 0.165 45.6)",
+        "tonalRamp": [
+          "oklch(15% 0.083 45.6)",
+          "oklch(26% 0.083 45.6)",
+          "oklch(37% 0.165 45.6)",
+          "oklch(48% 0.165 45.6)",
+          "oklch(59% 0.165 45.6)",
+          "oklch(70% 0.165 45.6)",
+          "oklch(82% 0.165 45.6)",
+          "oklch(95% 0.083 45.6)"
+        ]
+      },
+      "ball-lo": {
+        "role": "tertiary",
+        "displayName": "Sombra del balón",
+        "canonical": "oklch(40.5% 0.122 38.7)",
+        "tonalRamp": [
+          "oklch(15% 0.061 38.7)",
+          "oklch(26% 0.061 38.7)",
+          "oklch(37% 0.122 38.7)",
+          "oklch(48% 0.122 38.7)",
+          "oklch(59% 0.122 38.7)",
+          "oklch(70% 0.122 38.7)",
+          "oklch(82% 0.122 38.7)",
+          "oklch(95% 0.061 38.7)"
+        ]
+      },
+      "ball-seam": {
+        "role": "tertiary",
+        "displayName": "Costura del balón",
+        "canonical": "oklch(17.3% 0.012 60.6)",
+        "tonalRamp": [
+          "oklch(15% 0.006 60.6)",
+          "oklch(26% 0.006 60.6)",
+          "oklch(37% 0.012 60.6)",
+          "oklch(48% 0.012 60.6)",
+          "oklch(59% 0.012 60.6)",
+          "oklch(70% 0.012 60.6)",
+          "oklch(82% 0.012 60.6)",
+          "oklch(95% 0.006 60.6)"
+        ]
+      },
+      "ball-mid": {
+        "role": "tertiary",
+        "displayName": "Medio del balón",
+        "canonical": "oklch(63.6% 0.183 40.3)",
+        "tonalRamp": [
+          "oklch(15% 0.092 40.3)",
+          "oklch(26% 0.092 40.3)",
+          "oklch(37% 0.183 40.3)",
+          "oklch(48% 0.183 40.3)",
+          "oklch(59% 0.183 40.3)",
+          "oklch(70% 0.183 40.3)",
+          "oklch(82% 0.183 40.3)",
+          "oklch(95% 0.092 40.3)"
+        ]
+      },
+      "grid": {
+        "role": "neutral",
+        "displayName": "Cuadrícula fina",
+        "canonical": "rgba(216, 207, 192, .12)",
+        "tonalRamp": [
+          "oklch(15% 0.011 80.7)",
+          "oklch(26% 0.011 80.7)",
+          "oklch(37% 0.023 80.7)",
+          "oklch(48% 0.023 80.7)",
+          "oklch(59% 0.023 80.7)",
+          "oklch(70% 0.023 80.7)",
+          "oklch(82% 0.023 80.7)",
+          "oklch(95% 0.011 80.7)"
+        ]
+      },
+      "grid-strong": {
+        "role": "neutral",
+        "displayName": "Cuadrícula mayor",
+        "canonical": "rgba(216, 207, 192, .26)",
+        "tonalRamp": [
+          "oklch(15% 0.011 80.7)",
+          "oklch(26% 0.011 80.7)",
+          "oklch(37% 0.023 80.7)",
+          "oklch(48% 0.023 80.7)",
+          "oklch(59% 0.023 80.7)",
+          "oklch(70% 0.023 80.7)",
+          "oklch(82% 0.023 80.7)",
+          "oklch(95% 0.011 80.7)"
+        ]
+      }
+    },
+    "finishes": [
+      {
+        "name": "cuero",
+        "selector": ":root[data-finish=\"cuero\"] (por defecto)",
+        "values": {
+          "ball-hi": "#f27a3c",
+          "ball-mid": "#e2591f",
+          "ball-lo": "#7d2a0a",
+          "ball-seam": "#140f0b"
+        }
+      },
+      {
+        "name": "noche",
+        "selector": ":root[data-finish=\"noche\"]",
+        "values": {
+          "ball-hi": "#6a5a50",
+          "ball-mid": "#33281f",
+          "ball-lo": "#0f0b08",
+          "ball-seam": "#d8cfc0"
+        }
+      },
+      {
+        "name": "asfalto",
+        "selector": ":root[data-finish=\"asfalto\"]",
+        "values": {
+          "ball-hi": "#ecbc78",
+          "ball-mid": "#c4863a",
+          "ball-lo": "#5e3b12",
+          "ball-seam": "#1c1611"
+        }
+      }
+    ],
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Titular de la primera lámina, apoyado sobre el suelo de la placa."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Titulares de sección; el cierre sube a clamp(3rem, 8vw, 6rem)."
+      },
+      "manifesto": {
+        "displayName": "Manifiesto",
+        "purpose": "Párrafo-idea revelado palabra a palabra (palabras al 16% hasta revelarse)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Títulos de fotograma en la tira de negativo."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido."
+      },
+      "lede": {
+        "displayName": "Entradilla",
+        "purpose": "Entradillas de sección en plata apagada, máx. 34rem."
+      },
+      "label-button": {
+        "displayName": "Label botón",
+        "purpose": "Botones; 13px en la variante pequeña."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "Solo la marca VORTEX."
+      },
+      "measure-value": {
+        "displayName": "Valor medido",
+        "purpose": "Valores de anotación y lectura, cifras tabulares, coma decimal."
+      },
+      "measure-key": {
+        "displayName": "Clave de medida",
+        "purpose": "Claves en mayúsculas pegadas a un valor y a una línea guía; filas de la lectura."
+      },
+      "measure-small": {
+        "displayName": "Advertencia",
+        "purpose": "Etiqueta de datos sintéticos y bordes de fotograma."
+      }
+    },
+    "shadows": [
+      {
+        "name": "leather-warmth",
+        "value": "0 8px 24px -10px rgba(226, 89, 31, .6)",
+        "purpose": "Solo bajo el botón primario grande."
+      },
+      {
+        "name": "leather-warmth-hover",
+        "value": "0 12px 28px -10px rgba(226, 89, 31, .7)",
+        "purpose": "Hover del botón primario."
+      },
+      {
+        "name": "swatch-volume",
+        "value": "inset -4px -6px 10px rgba(0, 0, 0, .45)",
+        "purpose": "Círculos de muestra de acabado, para que lean como esferas."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Transiciones CSS de estado y del color del balón (--ease-out)."
+      },
+      {
+        "name": "gsap-expo-out",
+        "value": "expo.out",
+        "purpose": "Equivalente GSAP para entradas, anotaciones y estelas."
+      },
+      {
+        "name": "flash",
+        "value": "filter: brightness(2.4) -> brightness(1), .55s, expo.out",
+        "purpose": "Destello de cada exposición nueva; único gesto de entrada."
+      },
+      {
+        "name": "afterglow",
+        "value": "opacity max(.28, .8 - edad * .07)",
+        "purpose": "Estela: las exposiciones anteriores se apagan sin desaparecer."
+      },
+      {
+        "name": "annotation-reveal",
+        "value": "opacity 0 -> 1, .4s, expo.out",
+        "purpose": "Aparición de anotaciones al llegar su exposición."
+      },
+      {
+        "name": "finish-change",
+        "value": ".7s var(--ease-out) sobre --ball-*",
+        "purpose": "Interpolación de los colores del balón al cambiar de acabado."
+      },
+      {
+        "name": "state",
+        "value": ".25s var(--ease-out)",
+        "purpose": "Hover de botón y opciones; .2s en enlaces y campo."
+      },
+      {
+        "name": "smooth-scroll",
+        "value": "Lenis lerp .1",
+        "purpose": "Scroll suave; desactivado con prefers-reduced-motion."
+      },
+      {
+        "name": "reduced",
+        "value": "clase .reduced en <html>",
+        "purpose": "Relato completo estático: sin pin, todas las exposiciones visibles."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "max-width: 860px"
+      },
+      {
+        "name": "portrait",
+        "value": "max-aspect-ratio: 1/1"
+      },
+      {
+        "name": "dribble-narrow",
+        "value": "max-width: 700px (viewBox del bote, en JS)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Pastilla de cuero; la acción principal (apuntarse).",
+      "html": "<a class=\"ds-btn\" href=\"#\">Apúntate a la lista</a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;gap:10px;background:var(--leather,#e2591f);color:var(--albumen,#1c1611);font:700 15px/1 'Archivo Variable','Archivo',sans-serif;font-stretch:110%;padding:15px 24px;border-radius:999px;text-decoration:none;border:0;cursor:pointer;box-shadow:0 8px 24px -10px rgba(226,89,31,.6);transition:background .25s cubic-bezier(.16,1,.3,1),transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s cubic-bezier(.16,1,.3,1)}.ds-btn:hover{background:var(--leather-hover,#f06a2c);transform:translateY(-1px);box-shadow:0 12px 28px -10px rgba(226,89,31,.7)}.ds-btn:active{transform:translateY(0)}.ds-btn:focus-visible{outline:2px solid var(--leather,#e2591f);outline-offset:3px}"
+    },
+    {
+      "name": "Small Button",
+      "kind": "button",
+      "refersTo": "button-small",
+      "description": "CTA de la navegación, sin sombra.",
+      "html": "<a class=\"ds-btn-sm\" href=\"#\">Apúntate</a>",
+      "css": ".ds-btn-sm{display:inline-flex;background:var(--leather,#e2591f);color:var(--albumen,#1c1611);font:700 13px/1 'Archivo Variable','Archivo',sans-serif;font-stretch:110%;padding:10px 16px;border-radius:999px;text-decoration:none;transition:background .25s cubic-bezier(.16,1,.3,1)}.ds-btn-sm:hover{background:var(--leather-hover,#f06a2c)}.ds-btn-sm:focus-visible{outline:2px solid var(--leather,#e2591f);outline-offset:3px}"
+    },
+    {
+      "name": "Waitlist Input",
+      "kind": "input",
+      "refersTo": "input-waitlist",
+      "description": "Campo de correo en píldora sobre albúmina velada.",
+      "html": "<input class=\"ds-input\" type=\"email\" placeholder=\"tu@correo.com\" aria-label=\"Correo electrónico\">",
+      "css": ".ds-input{background:var(--albumen-2,#261e17);border:1px solid var(--grid-strong,rgba(216,207,192,.26));color:var(--silver,#d8cfc0);font:400 16px 'Archivo Variable','Archivo',sans-serif;padding:14px 20px;border-radius:999px;min-width:20rem;caret-color:var(--leather,#e2591f);transition:border-color .2s}.ds-input::placeholder{color:var(--silver-dim,#a39886)}.ds-input:hover{border-color:var(--silver-dim,#a39886)}.ds-input:focus-visible{outline:2px solid var(--leather,#e2591f);outline-offset:3px}.ds-input[aria-invalid=true]{border-color:var(--leather,#e2591f)}"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Barra fija: marca, enlaces en plata apagada y CTA de cuero.",
+      "html": "<header class=\"ds-nav\"><a class=\"ds-mark\" href=\"#\"><svg viewBox=\"-32 -32 64 64\" width=\"22\" height=\"22\" aria-hidden=\"true\"><circle r=\"30\" fill=\"#e2591f\"/><g stroke=\"#140f0b\" stroke-width=\"2.2\" fill=\"none\"><line x1=\"0\" y1=\"-30\" x2=\"0\" y2=\"30\"/><line x1=\"-30\" y1=\"0\" x2=\"30\" y2=\"0\"/><path d=\"M-21 -21 C -9 -8, -9 8, -21 21\"/><path d=\"M21 -21 C 9 -8, 9 8, 21 21\"/></g></svg>VORTEX</a><ul><li><a href=\"#\">Por dentro</a></li><li><a href=\"#\">Bote</a></li><li><a class=\"ds-nav-cta\" href=\"#\">Apúntate</a></li></ul></header>",
+      "css": ".ds-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:linear-gradient(var(--albumen,#1c1611) 35%,rgba(28,22,17,0));color:var(--silver,#d8cfc0);font-family:'Archivo Variable','Archivo',sans-serif}.ds-mark{display:flex;gap:10px;align-items:center;color:inherit;text-decoration:none;font-weight:800;font-stretch:125%;letter-spacing:.02em;font-size:18px}.ds-nav ul{display:flex;gap:34px;list-style:none;margin:0;padding:0;font-size:14px;align-items:center}.ds-nav ul a{color:var(--silver-dim,#a39886);text-decoration:none;transition:color .2s}.ds-nav ul a:hover{color:var(--silver,#d8cfc0)}.ds-nav ul a.ds-nav-cta{background:var(--leather,#e2591f);color:var(--albumen,#1c1611);font-weight:700;font-size:13px;font-stretch:110%;padding:10px 16px;border-radius:999px}.ds-nav a:focus-visible{outline:2px solid var(--leather,#e2591f);outline-offset:3px}"
+    },
+    {
+      "name": "Finish Option",
+      "kind": "chip",
+      "refersTo": "swatch-option",
+      "description": "Opción de acabado en píldora con muestra esférica; seleccionada con filete cuero.",
+      "html": "<label class=\"ds-swatch\"><input type=\"radio\" name=\"ds-f\" checked><span class=\"ds-sw\"></span><span><b>Cuero</b>Pista cubierta</span></label><label class=\"ds-swatch\"><input type=\"radio\" name=\"ds-f\"><span class=\"ds-sw ds-sw-noche\"></span><span><b>Noche</b>Edición oscura</span></label>",
+      "css": ".ds-swatch{display:flex;align-items:center;gap:16px;cursor:pointer;padding:12px 16px;margin-bottom:10px;border:1px solid var(--grid-strong,rgba(216,207,192,.26));border-radius:999px;background:var(--albumen,#1c1611);color:var(--silver,#d8cfc0);font-family:'Archivo Variable','Archivo',sans-serif;transition:border-color .25s cubic-bezier(.16,1,.3,1),background .25s cubic-bezier(.16,1,.3,1)}.ds-swatch:hover{border-color:var(--silver-dim,#a39886)}.ds-swatch:has(input:checked){border-color:var(--leather,#e2591f);background:var(--albumen-2,#261e17)}.ds-swatch:has(input:focus-visible){outline:2px solid var(--leather,#e2591f);outline-offset:3px}.ds-swatch input{position:absolute;opacity:0}.ds-swatch b{display:block;font-weight:700}.ds-swatch span:last-child{font-size:14px;color:var(--silver-dim,#a39886);line-height:1.3}.ds-sw{width:34px;height:34px;border-radius:50%;flex:none;background:#e2591f;box-shadow:inset -4px -6px 10px rgba(0,0,0,.45)}.ds-sw-noche{background:#33281f;outline:1px solid var(--grid-strong,rgba(216,207,192,.26))}"
+    },
+    {
+      "name": "Sensor Readout",
+      "kind": "card",
+      "refersTo": "readout-panel",
+      "description": "Panel de lectura opaco, esquina viva, todo en mono.",
+      "html": "<aside class=\"ds-readout\"><div class=\"ds-rh\"><span>Exposición</span><span><b>03</b> / 13</span></div><dl><dt>Altura</dt><dd>3,23 m</dd><dt>Distancia</dt><dd>1,08 m</dd><dt>Rotación</dt><dd>2,7 rps</dd></dl><p class=\"ds-synth\">Concepto · datos de demostración</p></aside>",
+      "css": ".ds-readout{min-width:15rem;font-family:'Martian Mono Variable','Martian Mono',monospace;font-size:12px;font-variant-numeric:tabular-nums;color:var(--silver,#d8cfc0);background:var(--albumen,#1c1611);padding:14px 16px;border:1px solid var(--grid-strong,rgba(216,207,192,.26))}.ds-rh{display:flex;justify-content:space-between;margin-bottom:12px;padding-bottom:8px;font-size:11px;color:var(--silver-dim,#a39886);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--grid-strong,rgba(216,207,192,.26))}.ds-rh b{color:var(--leather,#e2591f);font-weight:500}.ds-readout dl{display:grid;grid-template-columns:1fr auto;gap:6px 28px;margin:0}.ds-readout dt{color:var(--silver-dim,#a39886)}.ds-readout dd{margin:0;text-align:right}.ds-synth{margin:12px 0 0;font-size:11px;letter-spacing:.02em;color:var(--silver-dim,#a39886)}"
+    },
+    {
+      "name": "Leader-line Annotation",
+      "kind": "custom",
+      "description": "Firma del sistema: ancla en el nodo, línea guía, clave mono y valor.",
+      "html": "<svg class=\"ds-annot\" viewBox=\"0 0 320 140\" width=\"320\" height=\"140\" aria-hidden=\"true\"><circle cx=\"40\" cy=\"110\" r=\"5\"/><polyline points=\"40,110 120,40 300,40\"/><text x=\"130\" y=\"28\" class=\"k\">ÁPICE</text><text x=\"130\" y=\"62\">4,52 m</text></svg>",
+      "css": ".ds-annot{background:var(--albumen,#1c1611)}.ds-annot text{font-family:'Martian Mono Variable','Martian Mono',monospace;font-size:15px;fill:var(--silver,#d8cfc0);font-variant-numeric:tabular-nums}.ds-annot text.k{fill:var(--silver-dim,#a39886);font-size:12px;letter-spacing:.04em}.ds-annot polyline{stroke:var(--silver,#d8cfc0);stroke-width:1.2;fill:none}.ds-annot circle{fill:var(--silver,#d8cfc0)}"
+    },
+    {
+      "name": "Film-strip Frame",
+      "kind": "custom",
+      "description": "Fotogramas de la tira de negativo: borde de película mono, diagrama y texto.",
+      "html": "<div class=\"ds-strip\"><article class=\"ds-frame\"><div class=\"ds-edge\"><span>01</span><span>4,6 m</span></div><div class=\"ds-diag\"></div><h3>Tiro libre</h3><p class=\"ds-meas\">Salida · rotación · consistencia</p></article><article class=\"ds-frame\"><div class=\"ds-edge\"><span>02</span><span>Conos</span></div><div class=\"ds-diag\"></div><h3>Zigzag</h3><p class=\"ds-meas\">Ritmo · fuerza</p></article></div>",
+      "css": ".ds-strip{display:flex;border-block:1px solid var(--grid-strong,rgba(216,207,192,.26));background:var(--albumen,#1c1611);color:var(--silver,#d8cfc0)}.ds-frame{width:260px;padding:0 16px 16px}.ds-frame+.ds-frame{border-left:1px solid var(--grid-strong,rgba(216,207,192,.26))}.ds-edge{display:flex;justify-content:space-between;padding:10px 0;font:11px 'Martian Mono Variable','Martian Mono',monospace;color:var(--silver-dim,#a39886)}.ds-diag{height:120px;border-bottom:1px solid var(--grid,rgba(216,207,192,.12))}.ds-frame h3{font:850 1.6rem/1 'Archivo Variable','Archivo',sans-serif;font-stretch:72%;letter-spacing:-.02em;margin:16px 0 8px}.ds-meas{font:12px 'Martian Mono Variable','Martian Mono',monospace;margin:0}"
+    },
+    {
+      "name": "Spec Sheet",
+      "kind": "custom",
+      "description": "Ficha tabulada con filetes, sin cajas.",
+      "html": "<table class=\"ds-spec\"><caption>Ficha del concepto</caption><tbody><tr><th scope=\"row\">Talla</th><td>7</td></tr><tr><th scope=\"row\">Peso</th><td>600 g</td></tr></tbody></table>",
+      "css": ".ds-spec{border-collapse:collapse;width:100%;font:15px 'Archivo Variable','Archivo',sans-serif;color:var(--silver,#d8cfc0)}.ds-spec caption{text-align:left;font-size:14px;color:var(--silver-dim,#a39886);padding-bottom:10px}.ds-spec th,.ds-spec td{text-align:left;padding:10px 0;border-top:1px solid var(--grid-strong,rgba(216,207,192,.26))}.ds-spec th{font-weight:500;color:var(--silver-dim,#a39886);width:40%}.ds-spec td{font-variant-numeric:tabular-nums}"
+    }
+  ],
+  "narrative": {
+    "northStar": "La placa de cronofotografía",
+    "overview": "Toda la página es una sola placa fotográfica de estudio de movimiento: un fondo albúmina casi negro y cálido, una cuadrícula plateada que hace de regla, y el balón impreso exposición a exposición. El scroll actúa de obturador; cada exposición nueva entra con un destello y las anteriores se apagan sin desaparecer. La información no vive en tarjetas: vive en anotaciones con línea guía clavadas a puntos del dibujo, en mono, como las cotas de un instrumento.\n\nLa densidad es de lámina, no de catálogo: una imagen domina cada sección a sangre y el texto se apoya en ella (sobre la línea del suelo, junto al nodo que anota). El único color es el naranja del cuero del balón; todo lo demás es tinta plata sobre albúmina. La tipografía separa dos voces sin mezclarlas: Archivo condensada y pesada para afirmar, Martian Mono para medir.\n\nLo que el sistema rechaza, por evidencia del build: el producto flotando sobre negro con resplandor, y la rejilla de tarjetas de características. Los ejercicios se muestran como una tira de negativo continua; las especificaciones, como una ficha tabulada con filetes.",
+    "keyCharacteristics": [
+      "Fondo de placa único con cuadrícula doble (45px / 180px) que recorre toda la página.",
+      "Un solo color de acento: el cuero del balón, usado para acción, énfasis y la medida activa.",
+      "Titulares en Archivo al 72% de anchura y peso 850; medidas siempre en Martian Mono con cifras tabulares.",
+      "Anotaciones con línea guía y punto de anclaje en lugar de tarjetas o etiquetas sueltas.",
+      "Movimiento por exposiciones: destello (brillo 2,4 → 1) y estela que se apaga.",
+      "Versión estática completa con `prefers-reduced-motion`: todas las exposiciones impresas, ninguna oculta."
+    ],
+    "rules": [
+      {
+        "name": "The One Pigment Rule",
+        "body": "El cuero es el único color con croma de la página. Cualquier otro elemento es plata, plata apagada o albúmina. Si algo nuevo necesita destacar, usa cuero o no destaca.",
+        "section": "colors"
+      },
+      {
+        "name": "The Opaque Plate Rule",
+        "body": "Todo panel que se monta sobre la ilustración lleva fondo albúmina opaco y filete grid-strong, para que ninguna línea del dibujo lo atraviese. Nunca transparencias ni desenfoque.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Archivo afirma, Martian Mono mide. Ninguna frase en mono, ninguna cifra medida en Archivo (la ficha técnica, en Archivo con cifras tabulares, es la única excepción porque es texto de ficha, no lectura del sensor).",
+        "section": "typography"
+      },
+      {
+        "name": "The Pinned Key Rule",
+        "body": "Las claves en mayúsculas mono (SALIDA, ÁPICE, CUBIERTA) solo existen pegadas a un valor y a una línea guía que apunta a un punto del dibujo. Una clave sin valor ni ancla es un antetítulo y no pertenece al sistema.",
+        "section": "typography"
+      },
+      {
+        "name": "The Comma Decimal Rule",
+        "body": "Toda cifra se escribe con coma decimal y unidad separada por espacio (\"2,7 rps\", \"0,6 bar\").",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Plate Rule",
+        "body": "Ningún panel ni superficie de contenido se eleva sobre la placa; se distinguen con fondo opaco y filete, nunca con sombra o desenfoque. El botón primario es la única pieza con calor propio.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** dibujar cada nueva sección sobre la misma placa: albúmina, cuadrícula 45/180px y suelo plata cuando haya un objeto apoyado.",
+      "**Do** enseñar los datos midiendo en el dibujo: anotación con ancla, clave y valor en Martian Mono, coma decimal y unidad.",
+      "**Do** etiquetar cada cifra inventada con la advertencia mono de 11px (\"Concepto · datos de demostración\").",
+      "**Do** usar el destello (brillo 2,4 → 1, 0,55s, `expo.out`) y la estela atenuada como único lenguaje de entrada.",
+      "**Do** dar a todo lo interactivo forma de píldora y a todo lo que mide esquina viva con filete grid-strong.",
+      "**Do** ofrecer con `prefers-reduced-motion` el relato completo impreso: todas las exposiciones visibles, sin pin ni scroll horizontal."
+    ],
+    "donts": [
+      "**Don't** añadir un segundo color con croma; el cuero es el único pigmento.",
+      "**Don't** poner el balón flotando sobre negro con resplandor, ni agrupar características en una rejilla de tarjetas.",
+      "**Don't** elevar paneles con sombras, desenfoque o transparencias sobre la ilustración; usa albúmina opaca y filete.",
+      "**Don't** escribir prosa en Martian Mono ni cifras de sensor en Archivo.",
+      "**Don't** usar claves mono en mayúsculas como antetítulos sueltos sobre los titulares; solo existen pegadas a una medida.",
+      "**Don't** escribir colores del balón directamente; cambia el acabado con `data-finish` y deja que los tokens `--ball-*` interpolen."
+    ]
+  }
+}

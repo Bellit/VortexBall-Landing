@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="es" data-finish="cuero">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VORTEX · El balón que mide cada tiro</title>
+  <meta name="description" content="VORTEX es un balón de baloncesto conceptual con sensores dentro: mide el arco, la rotación y el ángulo de cada tiro, y la fuerza de cada bote.">
+  <meta name="theme-color" content="#1c1611">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+  <!-- Definiciones compartidas: el balón se dibuja una vez y se reutiliza con <use> -->
+  <svg width="0" height="0" class="defs" aria-hidden="true">
+    <defs>
+      <filter id="pebble" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="4" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -.9 .62" result="dots"/>
+        <feComposite in="dots" in2="SourceGraphic" operator="in"/>
+      </filter>
+      <filter id="pebbleLarge" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency=".32" numOctaves="2" seed="4" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -.9 .62" result="dots"/>
+        <feComposite in="dots" in2="SourceGraphic" operator="in"/>
+      </filter>
+      <radialGradient id="leatherShade" cx="38%" cy="32%" r="75%">
+        <stop offset="0" class="stop-hi"/>
+        <stop offset=".55" class="stop-mid"/>
+        <stop offset="1" class="stop-lo"/>
+      </radialGradient>
+      <clipPath id="ballClip"><circle r="30"/></clipPath>
+      <symbol id="ball" viewBox="-32 -32 64 64" overflow="visible">
+        <circle r="30" fill="url(#leatherShade)"/>
+        <circle r="30" fill="#000" filter="url(#pebble)" opacity=".35"/>
+        <g clip-path="url(#ballClip)" class="seams" stroke-width="2.2" fill="none" stroke-linecap="round">
+          <line x1="0" y1="-30" x2="0" y2="30"/>
+          <line x1="-30" y1="0" x2="30" y2="0"/>
+          <path d="M-21 -21 C -9 -8, -9 8, -21 21"/>
+          <path d="M21 -21 C 9 -8, 9 8, 21 21"/>
+        </g>
+        <circle r="30" fill="none" class="rim" stroke-width="1"/>
+      </symbol>
+      <pattern id="grid" width="45" height="45" patternUnits="userSpaceOnUse">
+        <path d="M45 0H0V45" fill="none" class="grid-minor"/>
+      </pattern>
+      <pattern id="gridMajor" width="180" height="180" patternUnits="userSpaceOnUse">
+        <path d="M180 0H0V180" fill="none" class="grid-major"/>
+      </pattern>
+    </defs>
+  </svg>
+
+  <a class="skip" href="#contenido">Saltar al contenido</a>
+
+  <header class="nav">
+    <a class="wordmark" href="#tiro" aria-label="VORTEX, volver al inicio">
+      <svg viewBox="-32 -32 64 64" aria-hidden="true"><use href="#ball" x="-32" y="-32" width="64" height="64"/></svg>VORTEX
+    </a>
+    <nav aria-label="Principal">
+      <ul>
+        <li><a href="#dentro">Por dentro</a></li>
+        <li><a href="#bote">Bote</a></li>
+        <li><a href="#ejercicios">Ejercicios</a></li>
+        <li><a href="#acabados">Acabados</a></li>
+        <li><a class="btn small" href="#lista">Apúntate</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="contenido">
+
+    <!-- 1 · El tiro: el scroll es el obturador -->
+    <section class="shot" id="tiro" aria-labelledby="tiro-h">
+      <div class="stage">
+        <!-- Escala: 180 unidades = 1 metro. Suelo en y = 900 -->
+        <svg class="plate" id="shotPlate" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" role="img"
+             aria-label="Estudio de movimiento: trece exposiciones del balón dibujan la parábola de un tiro hasta el aro">
+          <g class="svg-grid">
+            <rect width="1600" height="1000" class="plate-ground"/>
+            <rect width="1600" height="1000" fill="url(#grid)"/>
+            <rect width="1600" height="1000" fill="url(#gridMajor)"/>
+          </g>
+          <line x1="0" y1="900" x2="1600" y2="900" class="floor"/>
+          <g class="ruler" id="ruler" aria-hidden="true"></g>
+
+          <g class="hoop" aria-hidden="true">
+            <line x1="1468" y1="240" x2="1468" y2="420"/>
+            <line x1="1468" y1="351" x2="1440" y2="351"/>
+            <ellipse cx="1400" cy="351" rx="40" ry="8"/>
+            <path class="net" d="M1362 354 L1378 430 M1438 354 L1422 430 M1374 356 L1388 428 M1426 356 L1412 428 M1388 358 L1396 430 M1412 358 L1404 430 M1378 430 H1422"/>
+            <line class="post" x1="1468" y1="420" x2="1468" y2="900"/>
+          </g>
+
+          <path class="flight" d="M220 486 Q 800 -100 1398 338"/>
+          <g id="exposures"></g>
+
+          <g class="annot" aria-hidden="true">
+            <g data-at="0">
+              <path d="M220 486 L 300 406" class="dash"/>
+              <path d="M262 486 A 42 42 0 0 0 250 456"/>
+              <line x1="220" y1="486" x2="290" y2="486" class="faint"/>
+              <text x="300" y="476" class="k">SALIDA</text>
+              <text x="300" y="496">45°</text>
+            </g>
+            <g data-at="3">
+              <path d="M560 228 A 52 52 0 1 1 620 290"/>
+              <path d="M620 290 l -14 -2 m 14 2 l -2 -14"/>
+              <text x="636" y="306" class="k">ROTACIÓN</text>
+              <text x="636" y="326">2,7 rps</text>
+            </g>
+            <!-- posición calculada en shot.js a partir de la curva -->
+            <g data-at="7" id="apexNote">
+              <line class="dash faint apex-drop"/>
+              <line class="apex-lead"/>
+              <text class="k apex-k">ÁPICE</text>
+              <text class="apex-v"></text>
+            </g>
+            <g data-at="11">
+              <line x1="1330" y1="286" x2="1240" y2="200"/>
+              <text x="1120" y="180" class="k">ENTRADA</text>
+              <text x="1120" y="200">37°</text>
+            </g>
+          </g>
+        </svg>
+
+        <div class="hero-copy">
+          <h1 id="tiro-h">Cada tiro deja un <em>rastro</em>.</h1>
+          <p>VORTEX lleva los sensores dentro del balón. Mide el arco, la rotación y el ángulo de cada tiro, y la fuerza de cada bote. Sin cámaras ni pulseras.</p>
+          <a class="btn" href="#lista">Apúntate a la lista</a>
+        </div>
+
+        <aside class="readout" aria-label="Lectura del sensor en esta exposición">
+          <div class="readout-head"><span>Exposición</span><span><b id="rExp">01</b> / 13</span></div>
+          <dl>
+            <dt>Altura</dt><dd id="rH">2,30 m</dd>
+            <dt>Distancia</dt><dd id="rD">0,00 m</dd>
+            <dt>Rotación</dt><dd>2,7 rps</dd>
+            <dt>Tiempo</dt><dd id="rT">0,00 s</dd>
+          </dl>
+          <p class="synthetic">Concepto · datos de demostración</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 2 · La idea -->
+    <section class="idea" aria-label="La idea">
+      <p class="manifesto" id="manifesto">No es un balón con sensores pegados. Es <em>un sensor con forma de balón</em>: todo lo que mide ocurre dentro de la cubierta, y tú solo tienes que tirar.</p>
+    </section>
+
+    <!-- 3 · Por dentro: vista explosionada -->
+    <section class="inside" id="dentro" aria-labelledby="dentro-h">
+      <div class="stage">
+        <div class="inside-copy">
+          <h2 id="dentro-h">Por dentro, un instrumento.</h2>
+          <p>Un módulo suspendido en el centro exacto del balón. Así el bote y el tiro se sienten como siempre, y cada giro queda registrado.</p>
+        </div>
+
+        <svg class="plate" id="explodePlate" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" role="img"
+             aria-label="Vista explosionada del balón: cubierta, cámara, suspensión y módulo de sensores">
+          <defs>
+            <clipPath id="clipL"><rect x="0" y="0" width="800" height="1000"/></clipPath>
+            <clipPath id="clipR"><rect x="800" y="0" width="800" height="1000"/></clipPath>
+            <clipPath id="bigBall"><circle cx="800" cy="540" r="250"/></clipPath>
+            <g id="bigBallArt">
+              <circle cx="800" cy="540" r="250" fill="url(#leatherShade)"/>
+              <circle cx="800" cy="540" r="250" fill="#000" filter="url(#pebbleLarge)" opacity=".3"/>
+              <g clip-path="url(#bigBall)" class="seams" stroke-width="9" fill="none" stroke-linecap="round">
+                <line x1="800" y1="290" x2="800" y2="790"/>
+                <line x1="550" y1="540" x2="1050" y2="540"/>
+                <path d="M625 365 C 725 473, 725 607, 625 715"/>
+                <path d="M975 365 C 875 473, 875 607, 975 715"/>
+              </g>
+            </g>
+          </defs>
+          <g class="svg-grid">
+            <rect width="1600" height="1000" class="plate-ground"/>
+            <rect width="1600" height="1000" fill="url(#grid)"/>
+            <rect width="1600" height="1000" fill="url(#gridMajor)"/>
+          </g>
+
+          <g id="layerModule" class="layer">
+            <g id="spokes" class="spokes"></g>
+            <rect x="758" y="498" width="84" height="84" rx="10" class="module"/>
+            <path d="M774 520 H826 M774 540 H826 M774 560 H826 M790 510 V572 M810 510 V572" class="chip"/>
+          </g>
+          <circle id="layerBladder" class="layer bladder" cx="800" cy="540" r="228"/>
+
+          <g id="halfL"><g clip-path="url(#clipL)"><use href="#bigBallArt"/></g><line x1="800" y1="290" x2="800" y2="790" class="cut"/></g>
+          <g id="halfR"><g clip-path="url(#clipR)"><use href="#bigBallArt"/></g><line x1="800" y1="290" x2="800" y2="790" class="cut"/></g>
+
+          <g class="annot" aria-hidden="true">
+            <g data-part="cubierta">
+              <circle cx="380" cy="600" r="5"/>
+              <polyline points="380,600 300,760 40,760"/>
+              <text x="40" y="745" class="k">CUBIERTA</text>
+              <text x="40" y="790">Composite granulado, 8 gajos</text>
+            </g>
+            <g data-part="camara">
+              <circle cx="800" cy="312" r="5"/>
+              <polyline points="800,312 880,190 1200,190"/>
+              <text x="896" y="175" class="k">CÁMARA</text>
+              <text x="896" y="220">Butilo, 0,6 bar</text>
+            </g>
+            <g data-part="suspension">
+              <circle cx="603" cy="654" r="5"/>
+              <polyline points="603,654 560,900 230,900"/>
+              <text x="230" y="885" class="k">SUSPENSIÓN</text>
+              <text x="230" y="930">6 tirantes centran el módulo</text>
+            </g>
+            <g data-part="modulo">
+              <circle cx="842" cy="582" r="5"/>
+              <polyline points="842,582 990,900 1440,900"/>
+              <text x="1006" y="885" class="k">MÓDULO DE SENSORES</text>
+              <text x="1006" y="930">Acelerómetro y giroscopio</text>
+            </g>
+          </g>
+        </svg>
+
+        <ol class="parts">
+          <li><b>Cubierta.</b> Composite granulado, 8 gajos.</li>
+          <li><b>Cámara.</b> Butilo, 0,6 bar.</li>
+          <li><b>Suspensión.</b> 6 tirantes centran el módulo.</li>
+          <li><b>Módulo de sensores.</b> Acelerómetro y giroscopio.</li>
+        </ol>
+        <p class="synthetic inside-note">Ilustración del concepto</p>
+      </div>
+    </section>
+
+    <!-- 4 · El bote -->
+    <section class="dribble" id="bote" aria-labelledby="bote-h">
+      <div class="section-head">
+        <h2 id="bote-h">El bote también habla.</h2>
+        <p>Cada contacto con el suelo queda registrado: con cuánta fuerza y cada cuánto. Tu ritmo de dribling, exposición a exposición.</p>
+      </div>
+      <div class="dribble-plate">
+        <svg id="dribblePlate" viewBox="0 0 1400 560" role="img" aria-label="Siete botes, cada uno con su fuerza de impacto">
+          <rect width="1400" height="560" fill="url(#grid)"/>
+          <line x1="0" y1="470" x2="1400" y2="470" class="floor"/>
+          <g id="dribbleTrack"></g>
+        </svg>
+        <div class="dribble-foot">
+          <p class="synthetic">Datos de demostración · fuerza de impacto en newtons</p>
+          <p class="tempo">Ritmo <b>2,4</b> botes/s</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 · Ejercicios: hoja de contactos en horizontal -->
+    <section class="sessions" id="ejercicios" aria-labelledby="ejercicios-h">
+      <div class="sessions-pin">
+        <div class="section-head">
+          <h2 id="ejercicios-h">Cuatro ejercicios, una hoja de contactos.</h2>
+          <p>Cuatro maneras de entrenar con las mismas dos lecturas: el tiro y el bote.</p>
+        </div>
+        <div class="track" id="track">
+          <article class="frame" data-diagram="libre">
+            <svg viewBox="0 0 800 420" role="img" aria-label="Tiro libre desde 4,6 metros"></svg>
+            <div class="frame-text">
+              <h3>Tiro libre</h3>
+              <p>Repite el mismo tiro hasta que el ángulo de salida deje de moverse.</p>
+              <p class="measures">Salida · rotación · consistencia</p>
+            </div>
+          </article>
+          <article class="frame" data-diagram="bote">
+            <svg viewBox="0 0 800 420" role="img" aria-label="Bote y tiro en un solo movimiento"></svg>
+            <div class="frame-text">
+              <h3>Bote y tiro</h3>
+              <p>Del último bote al lanzamiento: el tiempo que tardas en armar el tiro.</p>
+              <p class="measures">Fuerza del bote · tiempo de armado · salida</p>
+            </div>
+          </article>
+          <article class="frame" data-diagram="zigzag">
+            <svg viewBox="0 0 800 420" role="img" aria-label="Dribling en zigzag entre conos, visto desde arriba"></svg>
+            <div class="frame-text">
+              <h3>Zigzag</h3>
+              <p>Cambios de dirección entre conos, sin perder el ritmo de bote.</p>
+              <p class="measures">Ritmo · fuerza</p>
+            </div>
+          </article>
+          <article class="frame" data-diagram="rango">
+            <svg viewBox="0 0 800 420" role="img" aria-label="Tres tiros desde distancias crecientes"></svg>
+            <div class="frame-text">
+              <h3>Rango</h3>
+              <p>Aléjate del aro y comprueba en qué distancia tu arco empieza a aplanarse.</p>
+              <p class="measures">Arco · ápice · distancia</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 · Acabados -->
+    <section class="finishes" id="acabados" aria-labelledby="acabados-h">
+      <div class="finishes-ball">
+        <!-- el balón apoyado en el suelo de la placa, con barra de escala -->
+        <svg viewBox="-62 -38 124 92" role="img" aria-label="El balón apoyado en el suelo; diámetro 238 milímetros">
+          <g id="finishGhosts"></g>
+          <ellipse cx="0" cy="30.5" rx="24" ry="2.4" class="contact"/>
+          <g id="finishBall"><use href="#ball" x="-32" y="-32" width="64" height="64"/></g>
+          <line x1="-62" y1="30" x2="62" y2="30" class="floor thin"/>
+          <g class="scalebar">
+            <line x1="-30" y1="40" x2="30" y2="40"/>
+            <line x1="-30" y1="37.5" x2="-30" y2="42.5"/>
+            <line x1="30" y1="37.5" x2="30" y2="42.5"/>
+            <text x="0" y="49" text-anchor="middle">Ø 238 mm</text>
+          </g>
+        </svg>
+      </div>
+      <div class="finishes-copy">
+        <h2 id="acabados-h">Tres acabados, el mismo instrumento.</h2>
+        <fieldset class="swatches">
+          <legend>Elige acabado</legend>
+          <label><input type="radio" name="finish" value="cuero" checked><span class="sw sw-cuero" aria-hidden="true"></span><span><b>Cuero</b>Pista cubierta</span></label>
+          <label><input type="radio" name="finish" value="noche"><span class="sw sw-noche" aria-hidden="true"></span><span><b>Noche</b>Edición oscura</span></label>
+          <label><input type="radio" name="finish" value="asfalto"><span class="sw sw-asfalto" aria-hidden="true"></span><span><b>Asfalto</b>Pista exterior</span></label>
+        </fieldset>
+        <table class="spec">
+          <caption>Ficha del concepto</caption>
+          <tbody>
+            <tr><th scope="row">Talla</th><td>7</td></tr>
+            <tr><th scope="row">Circunferencia</th><td>749 mm</td></tr>
+            <tr><th scope="row">Peso</th><td>600 g</td></tr>
+            <tr><th scope="row">Mide</th><td>Salida, rotación, arco y bote</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 7 · Cierre -->
+    <section class="close" id="lista" aria-labelledby="lista-h">
+      <h2 id="lista-h">Tira. VORTEX mide.</h2>
+      <p>VORTEX es un concepto. Déjanos tu correo y te contamos cómo se construyó esta página.</p>
+      <form class="waitlist" novalidate>
+        <label class="sr-only" for="email">Correo electrónico</label>
+        <input id="email" name="email" type="email" placeholder="tu@correo.com" autocomplete="email" required>
+        <button class="btn" type="submit">Apuntarme</button>
+      </form>
+      <p class="waitlist-msg" role="status"></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>VORTEX · producto ficticio, proyecto de portafolio</span>
+    <span>Hecho con Vite, GSAP y Lenis</span>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

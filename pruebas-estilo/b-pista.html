@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VORTEX · Prueba B · La pista</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --maple: #d6a061;
+    --maple-dark: #b77d3e;
+    --seam: rgba(92, 52, 16, .2);
+    --ink: #13204a;          /* tinta: azul marino de la pintura de pista */
+    --ink-soft: #2e3a63;
+    --cobalt: #1f3d9e;       /* la zona (la pintura) */
+    --cobalt-deep: #162d78;
+    --line: #fbf5ea;         /* líneas de pista */
+    --leather: #e2591f;
+    --display: "Big Shoulders Display", sans-serif;
+    --body: "Barlow", sans-serif;
+    --ease-out: cubic-bezier(.16, 1, .3, 1);
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.003 0.09' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.19 0 0 0 0 0.05 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--maple); color: var(--ink); scrollbar-color: var(--ink) var(--maple); }
+  body {
+    font-family: var(--body); line-height: 1.5; -webkit-font-smoothing: antialiased;
+    background-color: var(--maple);
+    background-image:
+      repeating-linear-gradient(0deg, transparent 0 31px, var(--seam) 31px 32px),
+      var(--grain);
+  }
+  ::selection { background: var(--cobalt); color: var(--line); }
+  :focus-visible { outline: 3px solid var(--cobalt); outline-offset: 3px; }
+
+  .nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px clamp(16px, 4vw, 48px);
+    background: linear-gradient(rgba(214, 160, 97, .92) 40%, transparent);
+  }
+  .wordmark { font: 900 26px/1 var(--display); letter-spacing: .04em; text-decoration: none; color: var(--ink); display: flex; gap: 10px; align-items: center; }
+  .wordmark svg { width: 24px; height: 24px; }
+  .nav ul { display: flex; gap: clamp(16px, 3vw, 36px); list-style: none; align-items: center; font-weight: 600; font-size: 15px; }
+  .nav ul a { color: var(--ink); text-decoration: none; }
+  .nav ul a:not(.btn):hover { text-decoration: underline; text-decoration-thickness: 2px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; border: 0; cursor: pointer;
+    background: var(--cobalt); color: var(--line); text-decoration: none;
+    font: 800 18px/1 var(--display); letter-spacing: .06em; text-transform: uppercase;
+    padding: 16px 26px; border-radius: 4px;
+    box-shadow: 0 6px 18px -8px rgba(19, 32, 74, .55);
+    transition: background .25s var(--ease-out), transform .25s var(--ease-out);
+  }
+  .btn:hover { background: var(--cobalt-deep); transform: translateY(-1px); }
+  .btn.small { padding: 11px 16px; font-size: 15px; }
+
+  /* ---------- pista: tabla de tiro ---------- */
+  .court { height: 320vh; position: relative; }
+  .stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+  .stage svg.plan { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero-copy { position: absolute; left: clamp(16px, 4vw, 48px); top: 50%; translate: 0 -46%; max-width: min(36rem, 40vw); z-index: 2; }
+  .hero-copy h1 {
+    font: 900 clamp(3.4rem, 8.6vw, 6rem)/.86 var(--display); text-transform: uppercase; letter-spacing: -.01em;
+    text-wrap: balance;
+  }
+  .hero-copy p { margin-top: 20px; font-size: clamp(16px, 1.3vw, 19px); color: var(--ink-soft); max-width: 30rem; }
+  .hero-copy .btn { margin-top: 28px; }
+
+  .box {
+    position: absolute; left: clamp(16px, 4vw, 48px); bottom: clamp(24px, 5vh, 48px); z-index: 2;
+    background: var(--ink); color: var(--line); border-radius: 4px; padding: 14px 18px 12px;
+    font-variant-numeric: tabular-nums; min-width: 22rem;
+    box-shadow: 0 10px 30px -14px rgba(19, 32, 74, .7);
+  }
+  .box table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  .box caption { text-align: left; font: 800 15px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; padding-bottom: 10px; display: flex; }
+  .box th { text-align: left; font-weight: 500; opacity: .65; font-size: 12px; padding-bottom: 6px; }
+  .box td, .box th { padding-right: 18px; }
+  .box td:last-child, .box th:last-child { padding-right: 0; text-align: right; }
+  .box tbody tr { opacity: .25; transition: opacity .3s var(--ease-out); }
+  .box tbody tr.on { opacity: 1; }
+  .box tbody td { padding-top: 3px; padding-bottom: 3px; }
+  .box .made { color: #ffb27f; font-weight: 600; }
+  .synthetic { font-size: 11px; opacity: .65; margin-top: 8px; }
+
+  .chart-label { font: 600 17px var(--body); fill: var(--ink); }
+  .chart-label.k { font: 800 13px var(--display); letter-spacing: .1em; fill: var(--ink-soft); }
+
+  /* ---------- la zona: bote ---------- */
+  .paint-sec { padding: clamp(96px, 16vh, 180px) clamp(16px, 4vw, 48px); }
+  .paint-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .paint-sec h2 { font: 900 clamp(2.8rem, 6vw, 5rem)/.88 var(--display); text-transform: uppercase; text-wrap: balance; }
+  .paint-sec p { margin-top: 18px; font-size: 18px; color: var(--ink-soft); max-width: 32rem; }
+  .paint { background: var(--cobalt); border: 6px solid var(--line); border-radius: 2px; position: relative; aspect-ratio: 49 / 58; max-height: 78vh; justify-self: center; width: 100%; max-width: 640px; box-shadow: 0 30px 60px -30px rgba(19, 32, 74, .6); }
+  .paint svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .paint .synthetic { position: absolute; bottom: -28px; left: 0; color: var(--ink); }
+
+  .close { padding: clamp(96px, 18vh, 200px) clamp(16px, 4vw, 48px); text-align: center; }
+  .close h2 { font: 900 clamp(3rem, 7vw, 6rem)/.88 var(--display); text-transform: uppercase; }
+  .close p { color: var(--ink-soft); margin: 16px auto 32px; max-width: 32rem; font-size: 18px; }
+  .waitlist { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .waitlist input {
+    background: var(--line); border: 2px solid var(--ink); color: var(--ink); caret-color: var(--cobalt);
+    font: 500 16px var(--body); padding: 14px 18px; border-radius: 4px; min-width: min(20rem, 100%);
+  }
+  .waitlist input::placeholder { color: #6b7192; }
+  .waitlist-msg { font-size: 14px; margin-top: 16px; min-height: 1.5em; color: var(--ink-soft); }
+  footer { padding: 22px clamp(16px, 4vw, 48px); display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-soft); border-top: 3px solid var(--line); }
+
+  @media (max-width: 760px) {
+    .nav ul li:not(:last-child) { display: none; }
+    .hero-copy { top: 84px; translate: none; max-width: none; right: 16px; }
+    .box { min-width: 0; right: 16px; }
+    .box table { font-size: 12px; }
+    .paint-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="pebble" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -.9 .62" result="dots"/>
+      <feComposite in="dots" in2="SourceGraphic" operator="in"/>
+    </filter>
+    <radialGradient id="leatherShade" cx="38%" cy="32%" r="75%">
+      <stop offset="0" stop-color="#f27a3c"/>
+      <stop offset=".55" stop-color="#e2591f"/>
+      <stop offset="1" stop-color="#7d2a0a"/>
+    </radialGradient>
+    <clipPath id="ballClip"><circle r="30"/></clipPath>
+    <symbol id="ball" viewBox="-32 -32 64 64" overflow="visible">
+      <circle r="30" fill="url(#leatherShade)"/>
+      <circle r="30" fill="#000" filter="url(#pebble)" opacity=".35"/>
+      <g clip-path="url(#ballClip)" stroke="#140f0b" stroke-width="2.2" fill="none" stroke-linecap="round">
+        <line x1="0" y1="-30" x2="0" y2="30"/>
+        <line x1="-30" y1="0" x2="30" y2="0"/>
+        <path d="M-21 -21 C -9 -8, -9 8, -21 21"/>
+        <path d="M21 -21 C 9 -8, 9 8, 21 21"/>
+      </g>
+      <circle r="30" fill="none" stroke="#140f0b" stroke-opacity=".5" stroke-width="1"/>
+    </symbol>
+    <filter id="drop" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#3a1f06" flood-opacity=".45"/>
+    </filter>
+  </defs>
+</svg>
+
+<header class="nav">
+  <a class="wordmark" href="#" aria-label="VORTEX, inicio">
+    <svg viewBox="-32 -32 64 64" aria-hidden="true"><use href="#ball"/></svg>VORTEX
+  </a>
+  <nav aria-label="Principal">
+    <ul>
+      <li><a href="#tiro">Tiro</a></li>
+      <li><a href="#bote">Bote</a></li>
+      <li><a class="btn small" href="#lista">Apúntate</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="court" id="tiro" aria-label="El tiro">
+    <div class="stage">
+      <!-- media pista FIBA vista desde arriba. 1 m = 64 unidades. Línea de fondo en x = 1520 -->
+      <svg class="plan" viewBox="0 0 1600 1000" preserveAspectRatio="xMaxYMid slice" role="img"
+           aria-label="Media pista vista desde arriba con la carta de tiro de una sesión: siete tiros, cinco anotados">
+        <g fill="none" stroke="var(--line)" stroke-width="5">
+          <rect x="1149" y="343" width="371" height="314" fill="var(--cobalt)"/>
+          <line x1="624" y1="20" x2="624" y2="980"/>
+          <line x1="1520" y1="20" x2="1520" y2="980"/>
+          <line x1="624" y1="20" x2="1520" y2="20"/>
+          <line x1="624" y1="980" x2="1520" y2="980"/>
+          <path d="M624 385 A 115 115 0 0 1 624 615"/>
+          <circle cx="1149" cy="500" r="115"/>
+          <path d="M1520 78 H1327 A 432 432 0 0 0 1327 922 H1520"/>
+          <path d="M1469 420 A 80 80 0 0 0 1469 580" stroke-width="4"/>
+        </g>
+        <!-- tablero y aro -->
+        <line x1="1478" y1="455" x2="1478" y2="545" stroke="var(--ink)" stroke-width="6"/>
+        <circle cx="1419" cy="500" r="23" fill="none" stroke="var(--leather)" stroke-width="5"/>
+        <text x="1149" y="512" text-anchor="middle" font-family="Big Shoulders Display" font-weight="900" font-size="38" letter-spacing="6" fill="var(--line)" opacity=".9">VORTEX</text>
+
+        <g id="shots"></g>
+        <g id="flyer" filter="url(#drop)"><use href="#ball" x="-26" y="-26" width="52" height="52"/></g>
+      </svg>
+
+      <div class="hero-copy">
+        <h1>Cada tiro, medido desde dentro.</h1>
+        <p>VORTEX lleva los sensores en el propio balón: ángulo de salida, rotación y arco de cada tiro, y la fuerza de cada bote. Tu carta de tiro se dibuja sola.</p>
+        <a class="btn" href="#lista">Apúntate a la lista</a>
+      </div>
+
+      <div class="box">
+        <table>
+          <caption>Sesión de tiro</caption>
+          <thead><tr><th>Zona</th><th>Salida</th><th>Rotación</th><th>Resultado</th></tr></thead>
+          <tbody id="boxRows"></tbody>
+        </table>
+        <p class="synthetic">Datos de demostración</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="paint-sec" id="bote" aria-labelledby="bote-h">
+    <div class="paint-grid">
+      <div>
+        <h2 id="bote-h">En la zona, cada bote cuenta.</h2>
+        <p>Un acelerómetro registra cada contacto con el parqué: la fuerza, el ritmo y la mano. Cuanto más fuerte el bote, más grande la huella.</p>
+      </div>
+      <div class="paint">
+        <svg viewBox="0 0 490 580" role="img" aria-label="La zona vista desde arriba con nueve huellas de bote; el tamaño de cada huella indica la fuerza">
+          <path d="M65 0 A 180 180 0 0 0 425 0" fill="none" stroke="var(--line)" stroke-width="4" stroke-dasharray="14 12" opacity=".5"/>
+          <g id="bounces"></g>
+        </svg>
+        <p class="synthetic">Datos de demostración · fuerza en newtons</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="close" id="lista" aria-labelledby="lista-h">
+    <h2 id="lista-h">Tú tiras. VORTEX apunta.</h2>
+    <p>VORTEX es un concepto. Déjanos tu correo y te contamos cómo se construyó esta página.</p>
+    <form class="waitlist" novalidate>
+      <label for="email" style="position:absolute;left:-9999px">Correo electrónico</label>
+      <input id="email" type="email" placeholder="tu@correo.com" autocomplete="email" required>
+      <button class="btn" type="submit">Apuntarme</button>
+    </form>
+    <p class="waitlist-msg" role="status"></p>
+  </section>
+</main>
+
+<footer>
+  <span>VORTEX · producto ficticio, proyecto de portafolio</span>
+  <span>Prueba de estilo B · La pista</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+  const NS = "http://www.w3.org/2000/svg";
+  const HOOP = [1419, 500];
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // sesión de demostración: posición en la pista, zona, ángulo de salida, rotación, anotado
+  const SHOTS = [
+    { p: [1460, 120], zone: "Esquina 3", ang: 46, rps: 2.6, made: true },
+    { p: [1150, 210], zone: "Ala 3",     ang: 44, rps: 2.8, made: false },
+    { p: [980, 500],  zone: "Frontal 3", ang: 47, rps: 2.7, made: true },
+    { p: [1149, 400], zone: "Codo",      ang: 49, rps: 2.5, made: true },
+    { p: [1149, 500], zone: "Tiro libre", ang: 51, rps: 2.9, made: true },
+    { p: [1250, 770], zone: "Media",     ang: 43, rps: 2.4, made: false },
+    { p: [1460, 880], zone: "Esquina 3", ang: 46, rps: 2.7, made: true },
+  ];
+  const fmt = n => String(n).replace(".", ",");
+
+  const shotsG = document.getElementById("shots");
+  const rows = document.getElementById("boxRows");
+  const marks = SHOTS.map((s, i) => {
+    const [x, y] = s.p;
+    const g = document.createElementNS(NS, "g");
+    const mark = s.made
+      ? `<circle cx="${x}" cy="${y}" r="15" fill="var(--ink)"/><circle cx="${x}" cy="${y}" r="15" fill="none" stroke="var(--line)" stroke-width="3"/>`
+      : `<path d="M${x-12} ${y-12} L${x+12} ${y+12} M${x+12} ${y-12} L${x-12} ${y+12}" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>`;
+    const lx = x - 26, anchor = "end";
+    g.innerHTML = `
+      <path class="trail" d="M${x} ${y} Q ${(x + HOOP[0]) / 2 + (y - HOOP[1]) * .18} ${(y + HOOP[1]) / 2 - (x - HOOP[0]) * .18} ${HOOP[0]} ${HOOP[1]}"
+            fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="2 8" stroke-linecap="round" opacity=".7"/>
+      ${mark}
+      <text class="chart-label k" x="${lx}" y="${y - 6}" text-anchor="${anchor}">${s.zone.toUpperCase()}</text>
+      <text class="chart-label" x="${lx}" y="${y + 15}" text-anchor="${anchor}">${s.ang}° · ${fmt(s.rps)} rps</text>`;
+    shotsG.appendChild(g);
+    rows.insertAdjacentHTML("beforeend",
+      `<tr><td>${s.zone}</td><td>${s.ang}°</td><td>${fmt(s.rps)} rps</td><td class="${s.made ? "made" : ""}">${s.made ? "Dentro" : "Fallo"}</td></tr>`);
+    return g;
+  });
+  const rowEls = [...rows.children];
+
+  // huellas de bote en la zona
+  const BOUNCES = [[150, 470, 58], [330, 430, 61], [190, 360, 64], [320, 300, 60], [170, 240, 66], [300, 190, 63], [210, 120, 59], [340, 90, 62], [245, 330, 70]];
+  const bG = document.getElementById("bounces");
+  const bEls = BOUNCES.map(([x, y, f]) => {
+    const r = (f - 40) * 1.6;
+    const g = document.createElementNS(NS, "g");
+    g.innerHTML = `
+      <circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="var(--line)" stroke-width="2" opacity=".35"/>
+      <circle cx="${x}" cy="${y}" r="${r * .6}" fill="none" stroke="var(--line)" stroke-width="2" opacity=".6"/>
+      <circle cx="${x}" cy="${y}" r="7" fill="var(--leather)"/>
+      <text x="${x + r * .6 + 8}" y="${y + 5}" font-family="Barlow" font-weight="600" font-size="15" fill="var(--line)">${f} N</text>`;
+    bG.appendChild(g);
+    return g;
+  });
+
+  document.querySelector(".waitlist").addEventListener("submit", e => {
+    e.preventDefault();
+    const input = document.getElementById("email"), msg = document.querySelector(".waitlist-msg");
+    msg.textContent = input.checkValidity()
+      ? "Gracias. VORTEX es un concepto: no se ha enviado nada."
+      : "Escribe un correo válido, por ejemplo tu@correo.com.";
+  });
+
+  const flyer = document.getElementById("flyer");
+
+  if (reduce) {
+    rowEls.forEach(r => r.classList.add("on"));
+    flyer.setAttribute("transform", `translate(${HOOP[0]} ${HOOP[1]})`);
+  } else {
+    const lenis = new Lenis({ lerp: .1 });
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    // el balón recorre cada trayectoria; la marca y la fila se encienden al llegar
+    const trails = marks.map(g => g.querySelector(".trail"));
+    marks.forEach(g => gsap.set(g, { opacity: 0 }));
+    const pos = { shot: 0, t: 0 };
+    function place(p) {
+      const n = SHOTS.length, seg = Math.min(n - 1, Math.floor(p * n)), local = p * n - seg;
+      const path = trails[seg], len = path.getTotalLength();
+      const pt = path.getPointAtLength(len * Math.min(1, local / .75));
+      const lift = Math.sin(Math.PI * Math.min(1, local / .75)) * .45; // el balón "sube" hacia la cámara
+      flyer.setAttribute("transform", `translate(${pt.x} ${pt.y}) scale(${1 + lift}) rotate(${p * 2400})`);
+      marks.forEach((g, i) => gsap.set(g, { opacity: i < seg || (i === seg && local > .75) ? 1 : i === seg ? .35 : 0 }));
+      rowEls.forEach((r, i) => r.classList.toggle("on", i < seg || (i === seg && local > .75)));
+    }
+    place(0);
+    ScrollTrigger.create({
+      trigger: ".court", start: "top top", end: "bottom bottom",
+      onUpdate: self => place(Math.min(.9999, self.progress)),
+    });
+    gsap.to(".hero-copy", {
+      opacity: 0, x: -40, ease: "none",
+      scrollTrigger: { trigger: ".court", start: "10% top", end: "28% top", scrub: true },
+    });
+
+    bEls.forEach(g => { g.style.transformBox = "fill-box"; });
+    gsap.from(bEls, {
+      scale: 0, opacity: 0, transformOrigin: "center", stagger: .12, ease: "expo.out", duration: 1,
+      scrollTrigger: { trigger: ".paint", start: "top 70%" },
+    });
+  }
+</script>
+</body>
+</html>

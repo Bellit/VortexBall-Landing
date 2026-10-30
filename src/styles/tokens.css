@@ -1,0 +1,48 @@
+/* Tokens: el mundo de la placa fotográfica.
+   Fondo albúmina, tinta plata y el cuero del balón como único color. */
+
+/* Registrar los colores del balón permite animarlos al cambiar de acabado */
+@property --ball-hi  { syntax: "<color>"; inherits: true; initial-value: #f27a3c; }
+@property --ball-mid { syntax: "<color>"; inherits: true; initial-value: #e2591f; }
+@property --ball-lo  { syntax: "<color>"; inherits: true; initial-value: #7d2a0a; }
+@property --ball-seam { syntax: "<color>"; inherits: true; initial-value: #140f0b; }
+
+:root {
+  --albumen: #1c1611;
+  --albumen-2: #261e17;
+  --silver: #d8cfc0;
+  --silver-dim: #a39886;
+  --grid: rgba(216, 207, 192, .12);
+  --grid-strong: rgba(216, 207, 192, .26);
+  --leather: #e2591f;
+  --leather-hover: #f06a2c;
+
+  --display: "Archivo Variable", "Archivo", sans-serif;
+  --mono: "Martian Mono Variable", "Martian Mono", monospace;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --section-y: clamp(96px, 16vh, 180px);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+
+  /* acabado por defecto: cuero */
+  --ball-hi: #f27a3c;
+  --ball-mid: #e2591f;
+  --ball-lo: #7d2a0a;
+  --ball-seam: #140f0b;
+  transition: --ball-hi .7s var(--ease-out), --ball-mid .7s var(--ease-out),
+              --ball-lo .7s var(--ease-out), --ball-seam .7s var(--ease-out);
+}
+
+:root[data-finish="noche"] {
+  --ball-hi: #6a5a50;
+  --ball-mid: #33281f;
+  --ball-lo: #0f0b08;
+  --ball-seam: #d8cfc0;
+}
+
+:root[data-finish="asfalto"] {
+  --ball-hi: #ecbc78;
+  --ball-mid: #c4863a;
+  --ball-lo: #5e3b12;
+  --ball-seam: #1c1611;
+}
