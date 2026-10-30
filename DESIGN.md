@@ -154,6 +154,7 @@ components:
     typography: "{typography.measure-key-small}"
   sound-toggle:
     textColor: "{colors.silver-dim}"
+    rounded: "{rounded.pill}"
   sound-toggle-on:
     textColor: "{colors.silver}"
   print-frame:

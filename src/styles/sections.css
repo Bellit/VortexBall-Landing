@@ -89,7 +89,6 @@
 }
 .macro-copy {
   position: absolute; z-index: 3; left: max(var(--gutter), 88px); bottom: clamp(48px, 10vh, 110px); max-width: 30rem;
-  text-shadow: 0 2px 24px rgba(10, 7, 5, .9);
 }
 .macro-copy p { margin-top: 16px; font-size: 18px; color: var(--silver); }
 .macro-scale {
@@ -101,7 +100,8 @@
 .macro-bar { display: block; height: 6px; border: 1px solid var(--silver); border-top: 0; }
 .macro.has-3d .stage::before {
   content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: linear-gradient(to top, rgba(14, 10, 8, .85), transparent 45%);
+  /* el texto se lee sobre este degradado, sin sombras propias */
+  background: linear-gradient(to top, rgba(14, 10, 8, .92), rgba(14, 10, 8, .78) 30%, transparent 62%);
 }
 
 /* ---------- 4 · El bote ---------- */

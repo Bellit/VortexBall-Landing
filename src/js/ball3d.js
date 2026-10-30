@@ -9,11 +9,29 @@ import { gsap } from "gsap";
 // siguen marcando posición, giro y opacidad, y esta capa dibuja un balón real.
 // ---------------------------------------------------------------------------
 
+// El material de cada acabado. Los colores (cuero y costura) no se escriben aquí:
+// se leen de tokens.css (--ball-mid y --ball-seam) para que el balón 3D y las
+// muestras del selector salgan siempre del mismo sitio.
 const FINISHES = {
-  cuero:   { base: [226, 89, 31],  seam: [22, 16, 12],    roughness: .62, clearcoat: 0 },
-  noche:   { base: [46, 36, 29],   seam: [205, 196, 182], roughness: .42, clearcoat: .35 },
-  asfalto: { base: [192, 130, 58], seam: [30, 23, 17],    roughness: .85, clearcoat: 0 },
+  cuero:   { base: [226, 89, 31], seam: [20, 15, 11], roughness: .62, clearcoat: 0 },
+  noche:   { base: [51, 40, 31],  seam: [216, 207, 192], roughness: .42, clearcoat: .35 },
+  asfalto: { base: [196, 134, 58], seam: [28, 22, 17], roughness: .85, clearcoat: 0 },
 };
+
+function readFinishColors() {
+  const probe = document.createElement("div");
+  probe.hidden = true;
+  document.body.append(probe);
+  const rgb = v => v.match(/\d+(\.\d+)?/g)?.slice(0, 3).map(Number);
+  for (const [name, f] of Object.entries(FINISHES)) {
+    probe.dataset.finish = name;
+    const cs = getComputedStyle(probe);
+    const base = rgb(cs.getPropertyValue("--ball-mid")), seam = rgb(cs.getPropertyValue("--ball-seam"));
+    if (base?.length === 3) f.base = base;     // si algo falla, se quedan los de arriba
+    if (seam?.length === 3) f.seam = seam;
+  }
+  probe.remove();
+}
 
 const SEAM_HALF = .03;            // media anchura de la costura, en radianes
 const CURVE = .92;                // radio angular de las costuras curvas
@@ -309,6 +327,7 @@ function mountOverSvg(svg, selector) {
 // Prepara las texturas y monta la capa 3D en las placas indicadas.
 // En pantallas grandes, después calcula la textura grande para el primer plano.
 export async function initBall3D(targets) {
+  readFinishColors();
   const lo = tiers.lo;
   lo.maps = await buildMaps(1536);
   lo.current = await colorFor(lo, finish, false);

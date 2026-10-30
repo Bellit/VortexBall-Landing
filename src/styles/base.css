@@ -103,7 +103,7 @@ em { font-style: normal; color: var(--leather); }
 
 .sound {
   display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
-  background: none; border: 0; padding: 6px 4px; border-radius: 4px;
+  background: none; border: 0; padding: 6px 10px; border-radius: 999px;
   font: inherit; font-size: 14px; color: var(--silver-dim); transition: color .2s;
 }
 .sound:hover { color: var(--silver); }

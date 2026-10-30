@@ -272,13 +272,13 @@
         },
         "material3d": {
           "base": "rgb(226, 89, 31)",
-          "seam": "rgb(22, 16, 12)",
+          "seam": "rgb(20, 15, 11)",
           "roughness": 0.62,
           "clearcoat": 0,
           "clearcoatRoughness": 0.5,
           "bumpScale": 3,
           "envMapIntensity": 0.35,
-          "source": "src/js/ball3d.js FINISHES"
+          "source": "color leído de tokens.css (--ball-mid, --ball-seam) por readFinishColors() en src/js/ball3d.js; material en FINISHES"
         }
       },
       {
@@ -291,14 +291,14 @@
           "ball-seam": "#d8cfc0"
         },
         "material3d": {
-          "base": "rgb(46, 36, 29)",
-          "seam": "rgb(205, 196, 182)",
+          "base": "rgb(51, 40, 31)",
+          "seam": "rgb(216, 207, 192)",
           "roughness": 0.42,
           "clearcoat": 0.35,
           "clearcoatRoughness": 0.5,
           "bumpScale": 3,
           "envMapIntensity": 0.35,
-          "source": "src/js/ball3d.js FINISHES"
+          "source": "color leído de tokens.css (--ball-mid, --ball-seam) por readFinishColors() en src/js/ball3d.js; material en FINISHES"
         }
       },
       {
@@ -311,14 +311,14 @@
           "ball-seam": "#1c1611"
         },
         "material3d": {
-          "base": "rgb(192, 130, 58)",
-          "seam": "rgb(30, 23, 17)",
+          "base": "rgb(196, 134, 58)",
+          "seam": "rgb(28, 22, 17)",
           "roughness": 0.85,
           "clearcoat": 0,
           "clearcoatRoughness": 0.5,
           "bumpScale": 3,
           "envMapIntensity": 0.35,
-          "source": "src/js/ball3d.js FINISHES"
+          "source": "color leído de tokens.css (--ball-mid, --ball-seam) por readFinishColors() en src/js/ball3d.js; material en FINISHES"
         }
       }
     ],

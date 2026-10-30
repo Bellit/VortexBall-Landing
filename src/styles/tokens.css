@@ -33,14 +33,23 @@
               --ball-lo .7s var(--ease-out), --ball-seam .7s var(--ease-out);
 }
 
-:root[data-finish="noche"] {
+/* Los acabados también valen en cualquier elemento con data-finish:
+   así el balón 3D puede leer los colores de cada uno sin duplicarlos */
+[data-finish="cuero"] {
+  --ball-hi: #f27a3c;
+  --ball-mid: #e2591f;
+  --ball-lo: #7d2a0a;
+  --ball-seam: #140f0b;
+}
+
+[data-finish="noche"] {
   --ball-hi: #6a5a50;
   --ball-mid: #33281f;
   --ball-lo: #0f0b08;
   --ball-seam: #d8cfc0;
 }
 
-:root[data-finish="asfalto"] {
+[data-finish="asfalto"] {
   --ball-hi: #ecbc78;
   --ball-mid: #c4863a;
   --ball-lo: #5e3b12;
