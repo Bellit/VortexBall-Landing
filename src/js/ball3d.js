@@ -3,9 +3,10 @@ import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment
 import { gsap } from "gsap";
 
 // ---------------------------------------------------------------------------
-// El balón en 3D. Las placas siguen siendo SVG (cuadrícula, notas, halos) y
-// los balones SVG siguen marcando posición, giro y opacidad; esta capa WebGL
-// se coloca encima y dibuja un balón 3D real en el sitio de cada uno.
+// El balón en 3D. Aquí vive lo compartido por todas las escenas: texturas del
+// cuero, material por acabado y luz de estudio. Además, `initBall3D` monta una
+// capa WebGL encima de las placas SVG (tiro y acabados): los balones SVG siguen
+// marcando posición, giro y opacidad, y esta capa dibuja un balón real en su sitio.
 // ---------------------------------------------------------------------------
 
 const FINISHES = {
@@ -14,19 +15,22 @@ const FINISHES = {
   asfalto: { base: [192, 130, 58], seam: [30, 23, 17],    roughness: .85, clearcoat: 0 },
 };
 
-const TW = 1536, TH = 768;        // textura equirectangular (ancho = 2 × alto)
 const SEAM_HALF = .03;            // media anchura de la costura, en radianes
 const CURVE = .92;                // radio angular de las costuras curvas
 
-let maps = null;                  // ruido + máscara de costuras, calculados una vez
-const colorCache = {};
+let maps = null;                  // ruido, máscara de costuras y relieve
+let colorCache = {};
 const materials = new Set();
 let finish = document.documentElement.dataset.finish || "cuero";
 
-// Ruido de granulado y máscara de costuras sobre la esfera.
+const yieldFrame = () => new Promise(r => setTimeout(r, 0));
+
+// Ruido de granulado y máscara de costuras sobre la esfera (textura equirectangular).
 // Un balón tiene dos círculos máximos (y = 0, x = 0) y dos costuras curvas
-// alrededor de los ejes ±x.
-function buildMaps() {
+// alrededor de los ejes ±x. Con `chunked` el cálculo se reparte en trozos
+// para no bloquear el scroll.
+async function buildMaps(TW, chunked = false) {
+  const TH = TW / 2;
   const small = document.createElement("canvas");
   small.width = TW / 2; small.height = TH / 2;
   const sctx = small.getContext("2d");
@@ -57,6 +61,7 @@ function buildMaps() {
       );
       seam[py * TW + px] = Math.max(0, 1 - d / SEAM_HALF);
     }
+    if (chunked && py % 48 === 47) await yieldFrame();
   }
 
   // relieve: granos en el cuero y un surco donde va la costura
@@ -72,11 +77,13 @@ function buildMaps() {
   }
   bc.putImageData(bd, 0, 0);
   const bumpTex = new THREE.CanvasTexture(bump);
-  return { noise, seam, bumpTex };
+  bumpTex.wrapS = THREE.RepeatWrapping;
+  return { TW, TH, noise, seam, bumpTex };
 }
 
 function colorTexture(name) {
   if (colorCache[name]) return colorCache[name];
+  const { TW, TH } = maps;
   const { base, seam: sc } = FINISHES[name];
   const c = document.createElement("canvas");
   c.width = TW; c.height = TH;
@@ -94,11 +101,13 @@ function colorTexture(name) {
   ctx.putImageData(img, 0, 0);
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
+  tex.wrapS = THREE.RepeatWrapping;
   tex.anisotropy = 8;
   return (colorCache[name] = tex);
 }
 
-function makeMaterial() {
+// Material del cuero con el acabado actual. Todos se actualizan juntos.
+export function makeBallMaterial(extra = {}) {
   const f = FINISHES[finish];
   const m = new THREE.MeshPhysicalMaterial({
     map: colorTexture(finish),
@@ -108,27 +117,67 @@ function makeMaterial() {
     clearcoat: f.clearcoat,
     clearcoatRoughness: .5,
     envMapIntensity: .35,
-    transparent: true,
     emissive: new THREE.Color("#ff9a5c"),
     emissiveIntensity: 0,
+    ...extra,
   });
   materials.add(m);
   return m;
 }
 
-// Cambiar de acabado cambia los materiales de todos los balones a la vez
-function setFinish(name) {
-  if (!FINISHES[name] || name === finish) return;
-  finish = name;
-  const f = FINISHES[name];
-  const map = colorTexture(name);
+function refreshMaterials() {
+  const f = FINISHES[finish];
+  const map = colorTexture(finish);
   materials.forEach(m => {
     m.map = map;
+    m.bumpMap = maps.bumpTex;
     m.roughness = f.roughness;
     m.clearcoat = f.clearcoat;
     m.needsUpdate = true;
   });
 }
+
+function setFinish(name) {
+  if (!FINISHES[name] || name === finish) return;
+  finish = name;
+  refreshMaterials();
+}
+
+// Renderer con el tono de color de toda la web y luz de estudio:
+// principal cálida arriba a la izquierda, contorno por detrás a la derecha
+// para recortar la silueta sobre el fondo oscuro, y un relleno suave.
+export function createRenderer() {
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.domElement.setAttribute("aria-hidden", "true");
+  return renderer;
+}
+
+export function studioScene(renderer) {
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
+  const key = new THREE.DirectionalLight("#fff1e0", 2.4);
+  key.position.set(-1, 1.3, 1.6);
+  const rim = new THREE.DirectionalLight("#ffd9b8", 3.2);
+  rim.position.set(1.6, .9, -1.1);
+  const fill = new THREE.HemisphereLight("#d8cfc0", "#1c1611", .35);
+  scene.add(key, rim, fill);
+  return { scene, key, rim, fill };
+}
+
+// Dibuja la escena en cada fotograma solo mientras `el` está en pantalla
+export function renderWhileVisible(el, frame) {
+  let visible = false;
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(el);
+  gsap.ticker.add(() => { if (visible) frame(); });
+}
+
+// Orientación base del balón: enseña una costura curva y las dos rectas
+export const BASE_ROTATION = new THREE.Euler(.35, -.85, .1);
 
 // Opacidad efectiva de un elemento SVG: la suya por la de sus padres
 function opacityOf(el, root) {
@@ -141,49 +190,22 @@ function opacityOf(el, root) {
   return o;
 }
 
-const SEGMENTS = [96, 64];
-const geometry = () => new THREE.SphereGeometry(1, ...SEGMENTS);
-
 // Monta una capa 3D encima de `svg`. `selector` elige los grupos SVG que son balones.
-function mount(svg, selector) {
+function mountOverSvg(svg, selector) {
   let renderer;
-  try {
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-  } catch {
-    return null;   // sin WebGL: se quedan los balones SVG
-  }
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-
+  try { renderer = createRenderer(); } catch { return null; }
   const canvas = renderer.domElement;
   canvas.className = "ball3d";
-  canvas.setAttribute("aria-hidden", "true");
   svg.after(canvas);
   svg.classList.add("has-3d");
 
-  const scene = new THREE.Scene();
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
-
-  // luz de estudio: principal cálida arriba a la izquierda, contorno por detrás
-  // a la derecha para recortar la silueta sobre el fondo oscuro, y un relleno suave
-  const key = new THREE.DirectionalLight("#fff1e0", 2.4);
-  key.position.set(-1, 1.3, 1.6);
-  const rim = new THREE.DirectionalLight("#ffd9b8", 3.2);
-  rim.position.set(1.6, .9, -1.1);
-  const fill = new THREE.HemisphereLight("#d8cfc0", "#1c1611", .35);
-  scene.add(key, rim, fill);
-
+  const { scene } = studioScene(renderer);
   // cámara ortográfica en píxeles del SVG: (0,0) arriba a la izquierda, y hacia abajo
   const camera = new THREE.OrthographicCamera(0, 1, 0, -1, -2000, 2000);
   camera.position.z = 1000;
 
   const balls = new Map();   // elemento SVG → grupo 3D
-  const geo = geometry();
-  // orientación base: enseña una costura curva y las dos rectas
-  const BASE = new THREE.Euler(.35, -.85, .1);
+  const geo = new THREE.SphereGeometry(1, 96, 64);
 
   function sync() {
     const box = svg.getBoundingClientRect();
@@ -206,8 +228,8 @@ function mount(svg, selector) {
       let ball = balls.get(el);
       if (!ball) {
         el.classList.add("b3d");
-        const mesh = new THREE.Mesh(geo, makeMaterial());
-        mesh.rotation.copy(BASE);
+        const mesh = new THREE.Mesh(geo, makeBallMaterial({ transparent: true }));
+        mesh.rotation.copy(BASE_ROTATION);
         ball = new THREE.Group();
         ball.add(mesh);
         scene.add(ball);
@@ -240,20 +262,24 @@ function mount(svg, selector) {
     });
   }
 
-  let visible = false;
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(svg);
-  gsap.ticker.add(() => {
-    if (!visible) return;
-    sync();
-    renderer.render(scene, camera);
-  });
-
+  renderWhileVisible(svg, () => { sync(); renderer.render(scene, camera); });
   return canvas;
 }
 
-// Prepara las texturas (una vez) y monta la capa 3D en las placas indicadas
-export function initBall3D(targets) {
-  maps = buildMaps();
+// Prepara las texturas y monta la capa 3D en las placas indicadas.
+// En pantallas grandes, después sube la textura a más resolución (para el macro).
+export async function initBall3D(targets) {
+  maps = await buildMaps(1536);
   document.addEventListener("finishchange", e => setFinish(e.detail));
-  return targets.map(([svg, selector]) => mount(svg, selector)).filter(Boolean);
+  const mounted = targets.map(([svg, selector]) => mountOverSvg(svg, selector)).filter(Boolean);
+  if (innerWidth > 800) {
+    buildMaps(3072, true).then(hi => {
+      const old = [maps.bumpTex, ...Object.values(colorCache)];
+      maps = hi;
+      colorCache = {};
+      refreshMaterials();
+      old.forEach(t => t.dispose());
+    });
+  }
+  return mounted;
 }

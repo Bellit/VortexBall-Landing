@@ -240,6 +240,19 @@
       </div>
     </section>
 
+    <!-- 3b · Macro: la cámara se acerca hasta el granulado y la costura -->
+    <section class="macro" id="detalle" aria-labelledby="detalle-h">
+      <div class="stage">
+        <svg class="macro-fallback" viewBox="-32 -32 64 64" aria-hidden="true"><use href="#ball" x="-32" y="-32" width="64" height="64"/></svg>
+        <div class="macro-dof" aria-hidden="true"></div>
+        <div class="macro-scale" aria-hidden="true"><span class="macro-bar"></span><span>10 mm</span></div>
+        <div class="macro-copy">
+          <h2 id="detalle-h">El tacto no cambia.</h2>
+          <p>Granulado profundo y costuras hundidas, como en cualquier balón de pista. El sensor va dentro: en la mano solo notas el balón.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- 4 · El bote -->
     <section class="dribble" id="bote" aria-labelledby="bote-h">
       <div class="section-head">
@@ -252,8 +265,15 @@
           <line x1="0" y1="470" x2="1400" y2="470" class="floor"/>
           <g id="dribbleTrack"></g>
         </svg>
+        <!-- lo que lee el sensor: un pico por impacto; la altura es la fuerza y la separación, el ritmo -->
+        <svg id="signalPlate" class="signal" viewBox="0 0 1400 240" role="img"
+             aria-label="Señal del acelerómetro: un pico por cada bote; la altura del pico es la fuerza y la separación entre picos, el ritmo">
+          <line x1="0" y1="180" x2="1400" y2="180" class="signal-base"/>
+          <path id="signalPath" class="signal-line"/>
+          <g class="signal-notes" id="signalNotes"></g>
+        </svg>
         <div class="dribble-foot">
-          <p class="synthetic">Datos de demostración · fuerza de impacto en newtons</p>
+          <p class="synthetic">Datos de demostración · fuerza de impacto en newtons · señal del acelerómetro</p>
           <p class="tempo">Ritmo <b>2,4</b> botes/s</p>
         </div>
       </div>

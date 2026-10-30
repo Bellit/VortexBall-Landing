@@ -46,11 +46,18 @@ initWaitlist();
 
 // El balón 3D (Three.js) se carga aparte para no frenar el resto de la página.
 // Si no llega en 1,5 s o no hay WebGL, la página sigue con los balones SVG.
-const ball3d = import("./js/ball3d.js")
-  .then(({ initBall3D }) => initBall3D([
-    [document.getElementById("shotPlate"), "#exposures > g"],
-    [document.querySelector(".finishes-ball svg"), "#finishBall, #finishGhosts > g"],
-  ]))
+const ball3d = Promise.all([import("./js/ball3d.js"), import("./js/inside3d.js"), import("./js/macro3d.js")])
+  .then(async ([{ initBall3D }, { initInside3D }, { initMacro3D }]) => {
+    const mounted = await initBall3D([
+      [document.getElementById("shotPlate"), "#exposures > g"],
+      [document.querySelector(".finishes-ball svg"), "#finishBall, #finishGhosts > g"],
+    ]);
+    if (!mounted.length) return null;   // sin WebGL: todo sigue en SVG
+    initInside3D(opts);
+    initMacro3D(opts);
+    ScrollTrigger.refresh();
+    return mounted;
+  })
   .catch(() => null);
 const atMost = ms => new Promise(r => setTimeout(r, ms));
 
