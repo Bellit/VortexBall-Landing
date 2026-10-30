@@ -87,9 +87,9 @@ Los datos que aparecen son de demostración y VORTEX no existe.
 
 ## Versiones guardadas
 
-La primera versión de la sección del bote (siete botes en fila y la señal del acelerómetro debajo) está guardada en la etiqueta `bote-v1`. Para verla o recuperar sus archivos:
+La primera versión de la sección de ejercicios (la hoja de contactos horizontal con cuatro copias en positivo) está guardada en la etiqueta `ejercicios-v1`. Para verla o recuperar sus archivos:
 
 ```bash
-git checkout bote-v1                         # ver el proyecto tal como estaba
-git checkout bote-v1 -- src/js/dribble.js    # traer solo un archivo de esa versión
+git checkout ejercicios-v1                         # ver el proyecto tal como estaba
+git checkout ejercicios-v1 -- src/js/sessions.js   # traer solo un archivo de esa versión
 ```
