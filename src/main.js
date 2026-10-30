@@ -14,7 +14,7 @@ import { initShot } from "./js/shot.js";
 import { initIdea } from "./js/idea.js";
 import { initInside } from "./js/inside.js";
 import { initDribble } from "./js/dribble.js";
-import { initSessions } from "./js/sessions.js";
+import { initSession } from "./js/session.js";
 import { initFinishes } from "./js/finishes.js";
 import { initWaitlist } from "./js/waitlist.js";
 import { initGrain } from "./js/grain.js";
@@ -42,7 +42,7 @@ const shot = initShot(opts);
 initIdea(opts);
 initInside(opts);
 initDribble(opts);
-initSessions(opts);
+initSession(opts);
 initFinishes(opts);
 initWaitlist(opts);
 initSound();
@@ -57,6 +57,7 @@ const ball3d = Promise.all([import("./js/ball3d.js"), import("./js/inside3d.js")
       [document.querySelector(".finishes-ball svg"), "#finishBall, #finishGhosts > g"],
       [document.querySelector(".close-ball svg"), "#closeBall"],
       [document.getElementById("bouncePlate"), "#dribbleBall"],
+      [document.getElementById("sessionPlate"), "#sessionBall, #sessionGhosts > g"],
     ]);
     if (!mounted.length) return null;   // sin WebGL: todo sigue en SVG
     initInside3D(opts);

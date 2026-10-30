@@ -23,6 +23,18 @@ const TOTAL = N * T;
 const IMPACTS = FORCES.map((_, i) => i * T + T_DOWN);
 const SQUASH_T = .022;          // ventana de tiempo en la que el balón se ve aplastado
 
+// El mismo bote, para otras escenas (la sesión de ejercicios): altura del centro,
+// velocidad y cuánto se aplasta (k de 0 a 1) en el instante t de un dribling
+export const DRIBBLE_PERIOD = T;
+export const DRIBBLE_HIT = T_DOWN;
+export function dribbleAt(t) {
+  const { h, v } = kinematics(t);
+  const tau = ((t % T) + T) % T;
+  const near = Math.abs(tau - T_DOWN);
+  const k = near < SQUASH_T ? 1 - near / SQUASH_T : 0;
+  return { h: k ? Math.min(h, FLOOR_C * (1 - .2 * k)) : h, v, k };
+}
+
 // Placa: 1 m = 500 unidades, suelo en y = 600
 const PX = 500, FLOOR_Y = 600, CX = 300, R = .12 * PX;
 

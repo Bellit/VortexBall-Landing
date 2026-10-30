@@ -23,7 +23,7 @@ npm run preview  # sirve dist/ para probarla
 | Por dentro | Vista explosionada en 3D: cámara, 6 tirantes y módulo de sensores, con etiquetas que siguen a cada pieza |
 | El tacto no cambia | Primer plano del cuero con luz rasante, desenfoque de bordes y barra de escala de 10 mm |
 | El bote | Un solo balón 3D que bota con física real; un panel anota fuerza del impacto, velocidad, sentido y una gráfica de fuerza y ritmo en vivo |
-| Ejercicios | Hoja de contactos horizontal con copias en positivo |
+| Ejercicios | Una sesión entera con un solo balón: tiros libres, bote y tiro, zigzag y rango, con reloj de sesión y un cuaderno que apunta cada ejercicio |
 | Acabados | Cuero, Noche y Asfalto: el balón entra rodando y cambian los materiales de todos los balones 3D |
 | Cierre | El balón bajo un foco; al apuntarte se revela una copia con tu primer tiro |
 
@@ -48,7 +48,7 @@ src/js/
   idea.js               la frase que se ilumina
   inside.js             vista explosionada en SVG (plan B sin WebGL)
   dribble.js            el bote: física (gravedad, restitución, aplastamiento) y panel del sensor
-  sessions.js           hoja de contactos en horizontal
+  session.js            la sesión de ejercicios: tomas con física, cámara, estela y cuaderno
   finishes.js           selector de acabado y entrada rodando
   waitlist.js           formulario de demostración y copia revelada
   counter.js            contador de fotogramas de la navegación
@@ -77,7 +77,8 @@ PRODUCT.md / DESIGN.md  ficha del producto y sistema de diseño
 
 ## Técnicas que se practican
 
-- **ScrollTrigger:** `onUpdate` con el progreso, timelines con `scrub`, `pin` con scroll horizontal y `containerAnimation`.
+- **ScrollTrigger:** `onUpdate` con el progreso, timelines con `scrub` y un reloj de simulación que el scroll hace avanzar (el bote y la sesión).
+- **Física sencilla:** tiros parabólicos que se calculan para entrar en el aro, gravedad, restitución y aplastamiento en el bote.
 - **`position: sticky`** para fijar escenarios mientras la sección hace scroll.
 - **Three.js:** materiales PBR, texturas generadas en canvas, cámara ortográfica alineada con un SVG, proyección de puntos 3D a la pantalla.
 - **Canvas y Web Audio:** grano de película y sonido sintetizados sin archivos.

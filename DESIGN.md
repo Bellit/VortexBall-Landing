@@ -16,7 +16,6 @@ colors:
   ball-seam: "#140f0b"
   print-paper: "#e7dfd0"
   print-ink: "#2a211a"
-  print-ink-dim: "#64584b"
   flash-core: "#fff1dc"
   flash-warm: "#ffb27a"
 typography:
@@ -41,13 +40,6 @@ typography:
     lineHeight: 1.02
     letterSpacing: "-0.025em"
     fontVariation: "'wdth' 78"
-  title:
-    fontFamily: "Archivo Variable, Archivo, sans-serif"
-    fontSize: "clamp(1.6rem, 2.4vw, 2.2rem)"
-    fontWeight: 850
-    lineHeight: 1
-    letterSpacing: "-0.02em"
-    fontVariation: "'wdth' 72"
   body:
     fontFamily: "Archivo Variable, Archivo, sans-serif"
     fontSize: "17px"
@@ -107,7 +99,6 @@ spacing:
   content-max: "1400px"
   xs: "8px"
   sm: "12px"
-  strip: "14px"
   md: "16px"
   lg: "24px"
   xl: "36px"
@@ -157,12 +148,21 @@ components:
     rounded: "{rounded.pill}"
   sound-toggle-on:
     textColor: "{colors.silver}"
-  print-frame:
-    backgroundColor: "{colors.print-paper}"
-    textColor: "{colors.print-ink}"
+  session-timeline:
+    textColor: "{colors.silver-dim}"
+    typography: "{typography.measure-key-small}"
     rounded: "{rounded.square}"
-    padding: "0 clamp(16px, 2vw, 28px) clamp(16px, 2vw, 24px)"
-    width: "min(72vw, 820px)"
+    height: "34px"
+    width: "min(560px, 44vw)"
+  session-log:
+    backgroundColor: "{colors.albumen}"
+    textColor: "{colors.silver}"
+    typography: "{typography.measure-key}"
+    rounded: "{rounded.square}"
+    padding: "16px 18px 12px"
+    width: "min(360px, 28vw)"
+  session-log-live:
+    textColor: "{colors.leather}"
   print-revealed:
     backgroundColor: "{colors.print-paper}"
     textColor: "{colors.print-ink}"
@@ -183,7 +183,7 @@ La placa es material, no pantalla: un grano de emulsión animado cubre toda la p
 
 La densidad es de lámina, no de catálogo: una imagen domina cada sección a sangre y el texto se apoya en ella (sobre la línea del suelo, junto al nodo que anota). El único pigmento es el naranja del cuero; todo lo demás es tinta plata sobre albúmina, o tinta oscura sobre papel en las copias. La tipografía separa dos voces sin mezclarlas: Archivo condensada y pesada para afirmar, Martian Mono para medir.
 
-Lo que el sistema rechaza, por evidencia del build: el producto flotando en el vacío sobre negro con un resplandor permanente, y la rejilla de tarjetas de características. Los ejercicios se muestran como una hoja de contactos continua; las especificaciones, como una ficha tabulada con filetes.
+Lo que el sistema rechaza, por evidencia del build: el producto flotando en el vacío sobre negro con un resplandor permanente, y la rejilla de tarjetas de características. Los ejercicios se muestran como una sola sesión cronometrada que el balón recorre en vista lateral, con su cuaderno al lado; las especificaciones, como una ficha tabulada con filetes.
 
 **Key Characteristics:**
 - Fondo de placa único con cuadrícula doble (45px / 180px) que recorre toda la página, bajo un grano de emulsión animado.
@@ -192,7 +192,7 @@ Lo que el sistema rechaza, por evidencia del build: el producto flotando en el v
 - Anotaciones con línea guía y punto de anclaje en lugar de tarjetas o etiquetas sueltas, también proyectadas sobre las escenas 3D.
 - Movimiento por exposiciones: imagen latente, destello con halo cálido y estela que se apaga; las cifras ruedan, no saltan.
 - Balón 3D real sobre la geometría SVG, con la placa SVG como respaldo completo.
-- Copias en positivo (papel claro, tinta oscura) dentro del mundo en negativo: hoja de contactos y copia revelada.
+- Una copia en positivo (papel claro, tinta oscura) dentro del mundo en negativo: la copia revelada del cierre.
 - Versión estática completa con `prefers-reduced-motion`: todas las exposiciones impresas, grano quieto, sin intro.
 
 ## Colors
@@ -200,13 +200,12 @@ Lo que el sistema rechaza, por evidencia del build: el producto flotando en el v
 Monocromo cálido de plata sobre albúmina con un único pigmento, el cuero, y su papel de copia como negativo invertido.
 
 ### Primary
-- **Cuero de balón** (leather): el único color de la página. CTA, palabra de énfasis en titulares (`em`), número de exposición activa en la lectura, impactos del bote, número de bote y línea de la gráfica de fuerza, conos, aristas del módulo de sensores, opción de acabado seleccionada, ondas del sonido activo, anillo de foco, selección de texto y cursor del campo.
+- **Cuero de balón** (leather): el único color de la página. CTA, palabra de énfasis en titulares (`em`), número de exposición activa en la lectura, impactos del bote, número de bote y línea de la gráfica de fuerza, conos del zigzag, avance de la línea de tiempo de la sesión (relleno al 16% y borde derecho de 2px), el "midiendo…" del ejercicio en curso en el cuaderno, aristas del módulo de sensores, opción de acabado seleccionada, ondas del sonido activo, anillo de foco, selección de texto y cursor del campo.
 - **Cuero encendido** (leather-hover): solo el estado hover del botón primario.
 
 ### Secondary: el papel de copia
-- **Papel de copia** (print-paper): fondo de cada fotograma de la hoja de contactos y de la copia revelada del cierre. Solo existe como copia en positivo, nunca como superficie de interfaz.
-- **Tinta de copia** (print-ink): titulares, medidas, suelo, aro y trayectorias dibujados sobre el papel.
-- **Tinta de copia apagada** (print-ink-dim): bordes de fotograma, párrafos y etiquetas secundarias sobre el papel.
+- **Papel de copia** (print-paper): fondo de la copia revelada del cierre. Solo existe como copia en positivo, nunca como superficie de interfaz.
+- **Tinta de copia** (print-ink): suelo, aro, trayectoria y pie mono dibujados sobre el papel.
 
 ### Tertiary: el acabado del balón y la luz
 - **Luz, medio, sombra y costura del balón** (ball-hi, ball-mid, ball-lo, ball-seam): los cuatro colores del degradado radial y las costuras del balón SVG. Están registrados con `@property` para animarse (0,7s) al cambiar de acabado; el acabado se cambia solo con el atributo `data-finish` en `<html>`, y el balón 3D escucha el evento `finishchange`. Valores por defecto: cuero. Variantes noche y asfalto, con sus parámetros de material 3D, en el sidecar.
@@ -215,17 +214,17 @@ Monocromo cálido de plata sobre albúmina con un único pigmento, el cuero, y s
 ### Neutral
 - **Albúmina** (albumen): el fondo de la placa en toda la página, el fondo opaco de los paneles que se superponen a la ilustración (lectura del sensor, opciones de acabado) y el texto sobre botones de cuero. También `theme-color` y el suelo de la luz hemisférica del 3D.
 - **Albúmina velada** (albumen-2): la superficie un tono por encima; campo de correo, opción de acabado seleccionada y relleno del módulo de sensores en la vista SVG.
-- **Tinta plata** (silver): texto principal, titulares, valores medidos, líneas de anotación, aro, suelo, regla de escala de la macro y número actual del contador.
-- **Plata apagada** (silver-dim): texto secundario (entradillas, leyendas, claves de medida, enlaces de navegación en reposo, contador de fotogramas, interruptor de sonido en reposo, pie, etiquetas de demostración). Contraste suficiente sobre albúmina para texto pequeño.
-- **Cuadrícula fina** (grid): la retícula menor de 45px y filetes internos discretos.
-- **Cuadrícula mayor** (grid-strong): la retícula de 180px y todos los filetes estructurales: borde de la lectura, bordes de la hoja de contactos, borde del panel del bote y base de su gráfica, filas de la ficha, borde del campo y de las opciones, línea superior del cierre y del pie.
+- **Tinta plata** (silver): texto principal, titulares, valores medidos, líneas de anotación, aro, suelo, regla de escala de la macro, número actual del contador, aro y suelo de la pista de la sesión, reloj de la sesión y resultados del cuaderno.
+- **Plata apagada** (silver-dim): texto secundario (entradillas, leyendas, claves de medida, enlaces de navegación en reposo, contador de fotogramas, interruptor de sonido en reposo, pie, etiquetas de demostración, nombres de los segmentos de la sesión, marcas de distancia en su suelo). Contraste suficiente sobre albúmina para texto pequeño.
+- **Cuadrícula fina** (grid): la retícula menor de 45px y filetes internos discretos (divisiones de la línea de tiempo, filas del cuaderno).
+- **Cuadrícula mayor** (grid-strong): la retícula de 180px y todos los filetes estructurales: borde de la lectura, borde de la línea de tiempo de la sesión, borde del cuaderno y su línea de cierre, borde del panel del bote y base de su gráfica, filas de la ficha, borde del campo y de las opciones, línea superior del cierre y del pie.
 
 ### Named Rules
 **The One Pigment Rule.** El cuero es el único color con croma de la página. Cualquier otro elemento es plata, plata apagada, albúmina o la tinta del papel de copia. La luz no cuenta como pigmento: el halo del destello (blanco cálido → ámbar → cuero), el foco del cierre y el brillo del balón 3D son cuero hecho luz, y solo existen como destello que se apaga o como luz que cae sobre el suelo. Si algo nuevo necesita destacar, usa cuero o no destaca.
 
 **The Opaque Plate Rule.** Todo panel que se monta sobre la ilustración lleva fondo albúmina opaco y filete grid-strong, para que ninguna línea del dibujo lo atraviese. Nunca transparencias ni desenfoque de interfaz; el único desenfoque del sistema es óptico, la profundidad de campo de la macro.
 
-**The Positive Print Rule.** Dentro del mundo en negativo, una copia es papel claro con tinta oscura (print-paper, print-ink, print-ink-dim). Sobre el papel el balón conserva su cuero, pero el halo del destello no existe: una copia ya está revelada, no se expone.
+**The Positive Print Rule.** Dentro del mundo en negativo, una copia es papel claro con tinta oscura (print-paper, print-ink). Sobre el papel el balón conserva su cuero, pero el halo del destello no existe: una copia ya está revelada, no se expone.
 
 ## Typography
 
@@ -233,19 +232,18 @@ Monocromo cálido de plata sobre albúmina con un único pigmento, el cuero, y s
 **Body Font:** Archivo Variable con Archivo, sans-serif
 **Label/Mono Font:** Martian Mono Variable con Martian Mono, monospace
 
-**Character:** Una sola familia con eje de anchura hace de voz: estrecha y muy pesada para afirmar, ancha para la marca, normal para leer. Martian Mono es el instrumento: solo aparece cuando hay una cifra, una clave de medida, un borde de película o una advertencia de datos sintéticos.
+**Character:** Una sola familia con eje de anchura hace de voz: estrecha y muy pesada para afirmar, ancha para la marca, normal para leer. Martian Mono es el instrumento: solo aparece cuando hay una cifra, una clave de medida, un reloj o una advertencia de datos sintéticos.
 
 ### Hierarchy
 - **Display** (850, `clamp(3rem, 7vw, 5.25rem)`, 0.9, anchura 72%): el titular de la primera lámina.
 - **Headline** (850, `clamp(2.6rem, 6vw, 5rem)`, 0.92, anchura 72%): titulares de sección; el cierre sube a `clamp(3rem, 8vw, 6rem)`.
 - **Manifesto** (800, `clamp(2.4rem, 6.4vw, 5.6rem)`, 1.02, anchura 78%, máx. 22ch): el párrafo-idea que se revela palabra a palabra.
-- **Title** (850, `clamp(1.6rem, 2.4vw, 2.2rem)`, 1, anchura 72%): títulos de cada fotograma de la hoja de contactos.
-- **Body** (400, 17px, 1.5): texto corrido; entradillas en plata apagada a 18px (máx. 34rem) y párrafos de fotograma a 42ch. Sobre la macro, la entradilla va en plata plena a 18px.
+- **Body** (400, 17px, 1.5): texto corrido; entradillas en plata apagada a 18px (máx. 34rem); la de la sesión, a 17px en una columna de 26rem bajo el titular. Sobre la macro, la entradilla va en plata plena a 18px. Los nombres de ejercicio del cuaderno van en Archivo 700 a 15px (13px en vertical): son nombres, no medidas.
 - **Label botón** (700, 15px, 1, anchura 110%): botones; 13px en la variante pequeña.
 - **Wordmark** (800, 18px, anchura 125%, +0.02em): solo la marca VORTEX.
-- **Medida** (Martian Mono 400, 15px valor / 12px clave, clave en mayúsculas +0.04em, cifras tabulares): anotaciones en el viewBox de la placa, lectura del sensor, regla en metros, ritmo.
-- **Medida en píxeles** (Martian Mono 400, 14px valor / 11px clave +0.04em): etiquetas dibujadas a tamaño de pantalla (líneas guía sobre el 3D, regla del bote, etiquetas de diagrama), cabecera de la lectura y contador de fotogramas (11px, tabulares).
-- **Advertencia** (Martian Mono 400, 11px, +0.02em, plata apagada): "Concepto · datos de demostración" junto a cada dato inventado; también los bordes de fotograma.
+- **Medida** (Martian Mono 400, 15px valor / 12px clave, clave en mayúsculas +0.04em, cifras tabulares): anotaciones en el viewBox de la placa, lectura del sensor, regla en metros, ritmo, cuaderno de sesión (12px) y reloj de la sesión (20px, 15px en vertical).
+- **Medida en píxeles** (Martian Mono 400, 14px valor / 11px clave +0.04em): etiquetas dibujadas a tamaño de pantalla (líneas guía sobre el 3D, regla del bote), cabecera de la lectura y contador de fotogramas (11px, tabulares).
+- **Advertencia** (Martian Mono 400, 11px, +0.02em, plata apagada): "Concepto · datos de demostración" junto a cada dato inventado; los nombres de segmento de la línea de tiempo usan el mismo cuerpo, sin espaciado.
 
 ### Named Rules
 **The Two Voices Rule.** Archivo afirma, Martian Mono mide. Ninguna frase en mono, ninguna cifra medida en Archivo (la ficha técnica, en Archivo con cifras tabulares, es la única excepción porque es texto de ficha, no lectura del sensor).
@@ -263,30 +261,29 @@ Una placa continua: la cuadrícula del `body` (45px menor, 180px mayor) corre ba
 - **Apoyo en el suelo:** en horizontal, el texto del héroe y la lectura se apoyan sobre la línea del suelo de la placa (`--above-floor`, calculado en JS) y el texto deja libre la regla en metros (mín. 88px a la izquierda). En la macro, texto abajo a la izquierda y barra de escala abajo a la derecha, a `clamp(48px, 10vh, 110px)` del borde.
 - **Cabecera de sección:** dos columnas iguales alineadas abajo (titular | entradilla), separadas 48px; una columna bajo 860px.
 - **Bote:** escena fija de 320vh. Título arriba a la izquierda, un solo balón botando sobre su placa con regla en metros en el centro, y el panel del sensor a la derecha (abajo y compacto en vertical).
-- **Hoja de contactos:** fila horizontal de copias de `min(72vw, 820px)` (86vw en móvil), separadas 14px dentro de una tira con 14px de margen entre filetes; desplazada por scroll; en movimiento reducido se envuelve y centra.
+- **Sesión:** escena fija de 480vh con viñeteado. Título arriba a la izquierda, línea de tiempo arriba a la derecha (`min(560px, 44vw)`), la pista en vista lateral abajo a la izquierda (`min(64vw, 980px)` × 66svh, a 7vh del borde) y el cuaderno abajo a la derecha (`min(360px, 28vw)`). La pista tiene su propia escala (1 m = 100 unidades, suelo en y = 450, balón dibujado casi al doble para leerse) y la cámara es el viewBox: cada ejercicio fija el tramo de pista visible (7; 7,3; 7,4 y 9,8 m de ancho) y el cambio se abre o se cierra en 0,7s.
 - **Acabados:** dos columnas (balón | elección y ficha), una bajo 860px.
 - **Cierre:** balón en reposo centrado (`min(56vw, 420px)`), titular, formulario y, al apuntarse, la copia revelada debajo.
-- **Pantallas verticales** (`max-aspect-ratio: 1/1`): la placa del tiro cambia a `meet` recortada a la trayectoria, los balones escalan 1,6x y solo sobreviven la regla y la primera anotación, ampliadas para seguir legibles; en la vista explosionada desaparecen las líneas guía y las partes pasan a una lista de dos columnas bajo la escena 3D; la barra de escala de la macro sube arriba.
+- **Pantallas verticales** (`max-aspect-ratio: 1/1`): la placa del tiro cambia a `meet` recortada a la trayectoria, los balones escalan 1,6x y solo sobreviven la regla y la primera anotación, ampliadas para seguir legibles; en la vista explosionada desaparecen las líneas guía y las partes pasan a una lista de dos columnas bajo la escena 3D; la barra de escala de la macro sube arriba; en la sesión desaparecen la entradilla y los nombres de segmento, la línea de tiempo baja a 10px de alto bajo el título, la pista ocupa todo el ancho y el cuaderno se compacta abajo en filas de dos columnas (nombre | valor).
 - **Ritmo interno:** 8 / 12 / 14 / 16 / 24 / 36 / 48px; la nav reduce sus enlaces al interruptor de sonido (sin texto) y al CTA bajo 860px, y oculta el contador.
 
 ## Elevation & Depth
 
-La placa es plana; la profundidad es fotográfica. Viene de la tinta (exposiciones antiguas de 0,8 bajando 0,07 por exposición hasta 0,28, futuras latentes a 0,05), de la cuadrícula en dos intensidades, de la superficie albumen-2 un tono por encima del fondo, del grano de emulsión (opacidad 0,09 en `overlay`) y del viñeteado que oscurece las esquinas de cada lámina a sangre. El volumen del balón lo da su render 3D con luz de estudio (o, sin WebGL, su degradado radial y su granulado `feTurbulence`) y una elipse de contacto negra al 55-60% en el suelo. En la macro, la profundidad de campo desenfoca el borde del encuadre. Las únicas piezas que proyectan sombra son objetos: el botón de cuero y las copias en papel.
+La placa es plana; la profundidad es fotográfica. Viene de la tinta (exposiciones antiguas de 0,8 bajando 0,07 por exposición hasta 0,28, futuras latentes a 0,05), de la cuadrícula en dos intensidades, de la superficie albumen-2 un tono por encima del fondo, del grano de emulsión (opacidad 0,09 en `overlay`) y del viñeteado que oscurece las esquinas de cada lámina a sangre. El volumen del balón lo da su render 3D con luz de estudio (o, sin WebGL, su degradado radial y su granulado `feTurbulence`) y una elipse de contacto negra al 55-60% en el suelo. En la macro, la profundidad de campo desenfoca el borde del encuadre. Las únicas piezas que proyectan sombra son objetos: el botón de cuero y la copia en papel.
 
 ### Shadow Vocabulary
 - **Calor del cuero** (`box-shadow: 0 8px 24px -10px rgba(226, 89, 31, .6)`; hover `0 12px 28px -10px rgba(226, 89, 31, .7)`): solo bajo el botón primario grande. La variante pequeña no la lleva.
 - **Volumen de muestra** (`box-shadow: inset -4px -6px 10px rgba(0, 0, 0, .45)`): solo en los círculos de muestra de acabado, para que lean como esferas.
-- **Copia en la tira** (`box-shadow: 0 18px 40px -24px rgba(0, 0, 0, .8)`): cada fotograma de papel de la hoja de contactos.
 - **Copia suelta** (`box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .9)`): la copia revelada del cierre, que además cae girada −1,5°.
 
 ### Named Rules
-**The Flat Plate Rule.** Ningún panel ni superficie de interfaz se eleva sobre la placa; se distinguen con fondo opaco y filete, nunca con sombra o desenfoque. Solo proyectan sombra los objetos: el botón primario (calor propio) y las copias en papel (sombra de papel apoyado).
+**The Flat Plate Rule.** Ningún panel ni superficie de interfaz se eleva sobre la placa; se distinguen con fondo opaco y filete, nunca con sombra o desenfoque. Solo proyectan sombra los objetos: el botón primario (calor propio) y la copia en papel (sombra de papel apoyado).
 
 **The Developing Light Rule.** La luz de la placa es de laboratorio: viñeteado fijo en las láminas, grano siempre presente, y luz cálida solo como destello que se apaga o foco que cae sobre el suelo bajo el balón.
 
 ## Shapes
 
-Dos geometrías y nada más. Lo que se toca es una píldora (999px): botones, campo de correo, opciones de acabado, enlace de salto. Lo que mide o se imprime es un rectángulo de esquina viva: lectura del sensor, hoja de contactos y sus copias, filas de la ficha, bordes de sección, copia revelada. El círculo pertenece al balón y a sus muestras. Las líneas de anotación son de 1,2px con punto de anclaje de radio 5 (4 en las líneas guía sobre el 3D); las trayectorias son discontinuas (3 7) a baja opacidad. La barra de escala es un corchete abierto por arriba: 6px de alto, filete plata de 1px.
+Dos geometrías y nada más. Lo que se toca es una píldora (999px): botones, campo de correo, opciones de acabado, enlace de salto. Lo que mide o se imprime es un rectángulo de esquina viva: lectura del sensor, panel del bote, línea de tiempo y cuaderno de la sesión, filas de la ficha, bordes de sección, copia revelada. El círculo pertenece al balón y a sus muestras; el triángulo, a los conos. Las líneas de anotación son de 1,2px con punto de anclaje de radio 5 (4 en las líneas guía sobre el 3D); las trayectorias son discontinuas (3 7) a baja opacidad. La barra de escala es un corchete abierto por arriba: 6px de alto, filete plata de 1px.
 
 ## Components
 
@@ -331,14 +328,20 @@ La cámara se acerca del balón entero al cruce de costuras y la luz principal b
 ### Panel del bote
 Un solo instrumento junto al balón: fondo albúmina, filete grid-strong, todo en Martian Mono con cifras tabulares. Cabecera con el número de bote en cuero; la fuerza del último impacto como cifra grande (44px, 32px en móvil) que rueda hasta su valor; velocidad, sentido y ritmo en filas clave/valor; y una gráfica de fuerza en el tiempo (línea cuero de 1,6px, rejilla discontinua, cursor punteado) que se revela hasta el instante actual, con un corchete bajo los dos últimos picos que marca el ritmo. Cada impacto dispara el destello del balón y una línea cuero que se abre en el suelo.
 
-### Hoja de contactos (copias en positivo)
-Una tira en negativo entre filetes grid-strong con copias en papel separadas 14px. Cada copia: borde de película en mono 11px tinta apagada (exposiciones y duración), diagrama en tinta oscura, título, párrafo y línea de medidas en mono 12px. Los conos siguen en cuero; los balones se exponen con destello al entrar en el centro, sin halo.
+### La sesión
+Cuatro ejercicios seguidos con un solo balón, en vista lateral de media pista y con física real: tiros libres, bote con armado y tiro, zigzag entre conos de cuero y tiros de rango desde 3, 4,6 y 6,75 m. Cada tiro calcula su velocidad para que la parábola entre por el centro del aro, atraviesa la red y cae; los botes usan la misma física del panel del bote, con aplastamiento al tocar el suelo. El scroll mueve un reloj único (suavizado 0,5s, `power2.out`) que recorre todas las tomas; cada tiro que sale y cada bote dispara el destello. Detrás del balón, una estela de cinco exposiciones a 0,06s entre sí (opacidad 0,30 → 0,10) que no cruza de una toma a otra. Los conos solo están plenos en el zigzag (12% en el resto); las marcas de distancia del suelo van en mono plata apagada.
+
+### Línea de tiempo de la sesión
+Una regla de tiempo, no una barra de progreso decorativa. Pista de 34px con filete grid-strong dividida en cuatro segmentos (filetes grid) con el nombre de cada ejercicio en mono 11px plata apagada; el avance es un relleno de cuero al 16% con borde derecho de cuero de 2px. A su derecha, el reloj en mono 20px plata con cifras tabulares, de 00:00 a 04:00: cada ejercicio vale un minuto, comprimido, y la advertencia del cuaderno lo dice.
+
+### Cuaderno de sesión
+Un panel de lectura (The Opaque Plate Rule): albúmina, filete grid-strong, mono 12px con cifras tabulares, relleno 16px 18px 12px. Cabecera de la lectura ("Cuaderno de sesión" y el contador `n / 4`). Una fila por ejercicio separada por filetes grid: pendiente al 35% con solo el nombre; en curso a opacidad plena con "midiendo…" en cuero; hecha con su resultado en plata ("3 de 3 dentro · salida 51°"). Al terminar aparece una línea de cierre tras un filete grid-strong ("Sesión completa · 04:00"); transiciones de 0,4-0,5s con `--ease-out`. Advertencia de datos sintéticos al pie.
 
 ### Copia revelada
 Al apuntarse, aparece bajo el formulario una copia en papel con un tiro completo dibujado en la gramática de la placa y un pie mono de 12px (nombre y fecha). Se revela del negro de la cubeta al positivo (brillo 0 y sepia 1 → normal, 2,2s, `power2.out`), cae girada −1,5° y suena el obturador si está activo.
 
 ### Exposición y destello
-Cada aparición de un balón en el relato (intro, tiro, bote, fotogramas, acabado) entra con un destello: un halo radial cálido de 2,8 veces el radio se abre detrás (opacidad 0,95 → 0, escala 0,45 → 1,2, 0,9s, `expo.out`, mezcla `screen`), el balón baja de `brightness(1.8)` a 1 en 0,6s y el balón 3D enciende su brillo emisivo durante 0,7s. Antes de su turno, las exposiciones del tiro esperan latentes al 5%; después quedan atenuadas.
+Cada aparición de un balón en el relato (intro, tiro, bote, sesión, acabado) entra con un destello: un halo radial cálido de 2,8 veces el radio se abre detrás (opacidad 0,95 → 0, escala 0,45 → 1,2, 0,9s, `expo.out`, mezcla `screen`), el balón baja de `brightness(1.8)` a 1 en 0,6s y el balón 3D enciende su brillo emisivo durante 0,7s. Antes de su turno, las exposiciones del tiro esperan latentes al 5%; después quedan atenuadas.
 
 ### Revelado (intro y titulares)
 La primera lámina sale del negro como una copia en la cubeta (brillo 0,06, contraste 1,6 y sepia 0,5 → normal, 1,5s); se disparan las tres primeras exposiciones y después sube el texto. Los titulares de sección suben línea a línea desde detrás de una máscara (110% → 0, 1,1s, escalonado 0,1s, `expo.out`) al entrar en pantalla. Ninguna intro bloquea más de 4s.
@@ -353,7 +356,7 @@ La primera lámina sale del negro como una copia en la cubeta (brillo 0,06, cont
 - **Do** dar a todo lo interactivo forma de píldora y a todo lo que mide o se imprime esquina viva.
 - **Do** montar cualquier balón 3D nuevo sobre un balón SVG que marque su posición, giro y opacidad, para que la página siga completa sin WebGL.
 - **Do** presentar los resultados como copias en positivo: papel claro, tinta oscura, sombra de papel, sin halo.
-- **Do** ofrecer con `prefers-reduced-motion` el relato completo impreso: todas las exposiciones visibles, grano quieto, sin intro, sin pin ni scroll horizontal.
+- **Do** ofrecer con `prefers-reduced-motion` el relato completo impreso: todas las exposiciones visibles, grano quieto, sin intro, sin pin; la sesión queda en su estado final (cuaderno completo, reloj en 04:00).
 
 ### Don't:
 - **Don't** añadir un segundo color con croma; el cuero es el único pigmento, y la luz cálida solo existe como destello o como foco sobre el suelo.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-30T12:19:06.598Z",
+  "generatedAt": "2026-10-30T13:42:31.325Z",
   "title": "Design System: VORTEX",
   "extensions": {
     "colorMeta": {
@@ -214,21 +214,6 @@
           "oklch(95% 0.009 59.7)"
         ]
       },
-      "print-ink-dim": {
-        "role": "secondary",
-        "displayName": "Tinta de copia apagada",
-        "canonical": "oklch(46.8% 0.026 69.4)",
-        "tonalRamp": [
-          "oklch(15% 0.013 69.4)",
-          "oklch(26% 0.013 69.4)",
-          "oklch(37% 0.026 69.4)",
-          "oklch(48% 0.026 69.4)",
-          "oklch(59% 0.026 69.4)",
-          "oklch(70% 0.026 69.4)",
-          "oklch(82% 0.026 69.4)",
-          "oklch(95% 0.013 69.4)"
-        ]
-      },
       "flash-core": {
         "role": "tertiary",
         "displayName": "Núcleo del destello",
@@ -335,10 +320,6 @@
         "displayName": "Manifiesto",
         "purpose": "Párrafo-idea revelado palabra a palabra (palabras al 16% hasta revelarse)."
       },
-      "title": {
-        "displayName": "Title",
-        "purpose": "Títulos de fotograma en la hoja de contactos."
-      },
       "body": {
         "displayName": "Body",
         "purpose": "Texto corrido; sobre la macro, entradilla en plata plena a 18px."
@@ -357,19 +338,19 @@
       },
       "measure-value": {
         "displayName": "Valor medido",
-        "purpose": "Valores de anotación y lectura, cifras tabulares, coma decimal."
+        "purpose": "Valores de anotación y lectura, cifras tabulares, coma decimal; el reloj de la sesión sube a 20px (15px en vertical)."
       },
       "measure-key": {
         "displayName": "Clave de medida",
-        "purpose": "Claves en mayúsculas pegadas a un valor y a una línea guía; filas de la lectura."
+        "purpose": "Claves en mayúsculas pegadas a un valor y a una línea guía; filas de la lectura y del cuaderno de sesión."
       },
       "measure-small": {
         "displayName": "Advertencia",
-        "purpose": "Etiqueta de datos sintéticos y bordes de fotograma."
+        "purpose": "Etiqueta de datos sintéticos; mismo cuerpo para los nombres de segmento de la línea de tiempo."
       },
       "measure-label": {
         "displayName": "Medida en píxeles",
-        "purpose": "Valores dibujados a tamaño de pantalla: líneas guía sobre el 3D, regla del bote, etiquetas de diagrama."
+        "purpose": "Valores dibujados a tamaño de pantalla: líneas guía sobre el 3D y regla del bote."
       },
       "measure-key-small": {
         "displayName": "Clave pequeña",
@@ -391,11 +372,6 @@
         "name": "swatch-volume",
         "value": "inset -4px -6px 10px rgba(0, 0, 0, .45)",
         "purpose": "Círculos de muestra de acabado, para que lean como esferas."
-      },
-      {
-        "name": "print-strip",
-        "value": "0 18px 40px -24px rgba(0, 0, 0, .8)",
-        "purpose": "Cada copia en papel de la hoja de contactos."
       },
       {
         "name": "print-loose",
@@ -485,9 +461,29 @@
         "purpose": "Scroll suave; desactivado con prefers-reduced-motion."
       },
       {
+        "name": "session-scrub",
+        "value": "gsap.to(t, .5s, power2.out) siguiendo el progreso de scroll; un reloj único recorre todas las tomas",
+        "purpose": "La sesión: el balón, la cámara, la línea de tiempo y el cuaderno derivan del mismo instante."
+      },
+      {
+        "name": "session-camera",
+        "value": "viewBox interpolado con smoothstep en .7s al cambiar de ejercicio (anchos 7 / 7,3 / 7,4 / 9,8 m)",
+        "purpose": "La cámara de la sesión se abre o se cierra según la pista que necesita el ejercicio."
+      },
+      {
+        "name": "session-trail",
+        "value": "5 exposiciones cada .06s, opacity op * (.3 - k * .05); solo dentro de la misma toma",
+        "purpose": "Estela del balón de la sesión."
+      },
+      {
+        "name": "session-log-state",
+        "value": "opacity .35 -> 1, .4s var(--ease-out); línea de cierre .5s",
+        "purpose": "Filas del cuaderno: pendiente, en curso, hecha."
+      },
+      {
         "name": "reduced",
         "value": "clase .reduced en <html>",
-        "purpose": "Relato completo estático: sin pin ni intro, grano quieto, escenas 3D en su estado final."
+        "purpose": "Relato completo estático: sin pin ni intro, grano quieto, escenas 3D en su estado final y la sesión terminada (04:00)."
       }
     ],
     "breakpoints": [
@@ -636,12 +632,20 @@
       "css": ".ds-annot{background:var(--albumen,#1c1611)}.ds-annot text{font-family:'Martian Mono Variable','Martian Mono',monospace;font-size:15px;fill:var(--silver,#d8cfc0);font-variant-numeric:tabular-nums}.ds-annot text.k{fill:var(--silver-dim,#a39886);font-size:12px;letter-spacing:.04em}.ds-annot polyline{stroke:var(--silver,#d8cfc0);stroke-width:1.2;fill:none}.ds-annot circle{fill:var(--silver,#d8cfc0)}"
     },
     {
-      "name": "Contact Sheet Print",
+      "name": "Session Timeline",
       "kind": "custom",
-      "description": "Hoja de contactos: tira en negativo entre filetes con copias en positivo (papel claro, tinta oscura).",
-      "html": "<div class=\"ds-strip\"><article class=\"ds-frame\"><p class=\"ds-edge\"><span>9 exposiciones</span><span>1,1 s</span></p><div class=\"ds-diag\"><svg viewBox=\"0 0 260 100\" aria-hidden=\"true\"><line x1=\"0\" y1=\"92\" x2=\"260\" y2=\"92\"/><path d=\"M30 70 Q 120 -10 220 40\"/></svg></div><h3>Tiro libre</h3><p class=\"ds-meas\">Salida · rotación · consistencia</p></article><article class=\"ds-frame\"><p class=\"ds-edge\"><span>6 exposiciones</span><span>2,5 s</span></p><div class=\"ds-diag\"></div><h3>Zigzag</h3><p class=\"ds-meas\">Ritmo · fuerza</p></article></div>",
-      "css": ".ds-strip{display:flex;gap:14px;padding-block:14px;border-block:1px solid var(--grid-strong,rgba(216,207,192,.26));background:var(--albumen,#1c1611)}.ds-frame{--print:#e7dfd0;--ink:#2a211a;--ink-dim:#64584b;width:260px;padding:0 16px 16px;background:var(--print);color:var(--ink);box-shadow:0 18px 40px -24px rgba(0,0,0,.8)}.ds-edge{display:flex;justify-content:space-between;margin:0;padding:10px 0;font:11px 'Martian Mono Variable','Martian Mono',monospace;font-variant-numeric:tabular-nums;color:var(--ink-dim)}.ds-diag{height:100px;border-bottom:1px solid rgba(42,33,26,.15)}.ds-diag svg{width:100%;height:100%}.ds-diag line{stroke:var(--ink);stroke-opacity:.5}.ds-diag path{fill:none;stroke:var(--ink);stroke-opacity:.35;stroke-dasharray:3 7}.ds-frame h3{font:850 1.6rem/1 'Archivo Variable','Archivo',sans-serif;font-stretch:72%;letter-spacing:-.02em;margin:16px 0 8px}.ds-meas{font:12px 'Martian Mono Variable','Martian Mono',monospace;margin:0;color:var(--ink)}",
-      "refersTo": "print-frame"
+      "refersTo": "session-timeline",
+      "description": "Regla de tiempo de la sesión: cuatro segmentos con nombre, avance en cuero al 16% con borde de 2px y reloj mono tabular.",
+      "html": "<div class=\"ds-tl\"><div class=\"ds-tl-track\"><span class=\"ds-tl-fill\"></span><ol><li>Tiro libre</li><li>Bote y tiro</li><li>Zigzag</li><li>Rango</li></ol></div><span class=\"ds-tl-clock\">02:30</span></div>",
+      "css": ".ds-tl{display:flex;align-items:center;gap:16px;width:560px;font-family:'Martian Mono Variable','Martian Mono',monospace;background:var(--albumen,#1c1611)}.ds-tl-track{position:relative;flex:1;height:34px;border:1px solid var(--grid-strong,rgba(216,207,192,.26))}.ds-tl-fill{position:absolute;left:0;top:0;bottom:0;width:62.5%;background:rgba(226,89,31,.16);border-right:2px solid var(--leather,#e2591f)}.ds-tl ol{position:relative;height:100%;margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(4,1fr)}.ds-tl li{display:flex;align-items:center;padding:0 8px;font-size:11px;color:var(--silver-dim,#a39886);border-left:1px solid var(--grid,rgba(216,207,192,.12));white-space:nowrap;overflow:hidden}.ds-tl li:first-child{border-left:0}.ds-tl-clock{font-size:20px;color:var(--silver,#d8cfc0);font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Session Log",
+      "kind": "card",
+      "refersTo": "session-log",
+      "description": "Cuaderno de sesión: panel de lectura opaco con una fila por ejercicio (pendiente, en curso en cuero, hecha con su resultado).",
+      "html": "<aside class=\"ds-log\"><div class=\"ds-rh\"><span>Cuaderno de sesión</span><span>2 / 4</span></div><ol><li class=\"done\"><b>Tiro libre</b><span>3 de 3 dentro · salida 51°</span></li><li class=\"done\"><b>Bote y tiro</b><span>armado 0,35 s · salida 48°</span></li><li class=\"live\"><b>Zigzag</b><span>midiendo…</span></li><li><b>Rango</b></li></ol><p class=\"ds-synth\">Concepto · datos de demostración · reloj de la sesión comprimido</p></aside>",
+      "css": ".ds-log{width:360px;padding:16px 18px 12px;background:var(--albumen,#1c1611);border:1px solid var(--grid-strong,rgba(216,207,192,.26));font:12px 'Martian Mono Variable','Martian Mono',monospace;font-variant-numeric:tabular-nums;color:var(--silver,#d8cfc0)}.ds-log .ds-rh{display:flex;justify-content:space-between;margin-bottom:12px;padding-bottom:8px;font-size:11px;color:var(--silver-dim,#a39886);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--grid-strong,rgba(216,207,192,.26))}.ds-log ol{list-style:none;margin:0;padding:0}.ds-log li{display:grid;gap:3px;padding:10px 0;border-top:1px solid var(--grid,rgba(216,207,192,.12));opacity:.35;transition:opacity .4s cubic-bezier(.16,1,.3,1)}.ds-log li:first-child{border-top:0}.ds-log li.done,.ds-log li.live{opacity:1}.ds-log b{font:700 15px 'Archivo Variable','Archivo',sans-serif;color:var(--silver,#d8cfc0)}.ds-log li.live span{color:var(--leather,#e2591f)}.ds-log .ds-synth{margin:8px 0 0;font-size:11px;letter-spacing:.02em;color:var(--silver-dim,#a39886)}"
     },
     {
       "name": "Spec Sheet",
@@ -661,7 +665,7 @@
   ],
   "narrative": {
     "northStar": "La placa de cronofotografía",
-    "overview": "Toda la página es una sola placa fotográfica de estudio de movimiento: un fondo albúmina casi negro y cálido, una cuadrícula plateada que hace de regla, y el balón impreso exposición a exposición. El scroll actúa de obturador; cada exposición nueva entra con un destello de luz cálida y las anteriores se apagan sin desaparecer, mientras las futuras ya se intuyen como imagen latente. La información no vive en tarjetas: vive en anotaciones con línea guía clavadas a puntos del dibujo, en mono, como las cotas de un instrumento.\n\nLa placa es material, no pantalla: un grano de emulsión animado cubre toda la página, las láminas a sangre caen hacia las esquinas con viñeteado, la primera lámina se revela desde el negro como una copia en la cubeta, y donde el relato enseña un resultado aparece una copia en positivo, papel claro con tinta oscura. El balón es un objeto real en 3D (cuero granulado, costuras hundidas, luz de estudio) montado sobre la misma geometría SVG que lo coloca; sin WebGL, la placa SVG sigue contando todo.\n\nLa densidad es de lámina, no de catálogo: una imagen domina cada sección a sangre y el texto se apoya en ella (sobre la línea del suelo, junto al nodo que anota). El único pigmento es el naranja del cuero; todo lo demás es tinta plata sobre albúmina, o tinta oscura sobre papel en las copias. La tipografía separa dos voces sin mezclarlas: Archivo condensada y pesada para afirmar, Martian Mono para medir.\n\nLo que el sistema rechaza, por evidencia del build: el producto flotando en el vacío sobre negro con un resplandor permanente, y la rejilla de tarjetas de características. Los ejercicios se muestran como una hoja de contactos continua; las especificaciones, como una ficha tabulada con filetes.",
+    "overview": "Toda la página es una sola placa fotográfica de estudio de movimiento: un fondo albúmina casi negro y cálido, una cuadrícula plateada que hace de regla, y el balón impreso exposición a exposición. El scroll actúa de obturador; cada exposición nueva entra con un destello de luz cálida y las anteriores se apagan sin desaparecer, mientras las futuras ya se intuyen como imagen latente. La información no vive en tarjetas: vive en anotaciones con línea guía clavadas a puntos del dibujo, en mono, como las cotas de un instrumento.\n\nLa placa es material, no pantalla: un grano de emulsión animado cubre toda la página, las láminas a sangre caen hacia las esquinas con viñeteado, la primera lámina se revela desde el negro como una copia en la cubeta, y donde el relato enseña un resultado aparece una copia en positivo, papel claro con tinta oscura. El balón es un objeto real en 3D (cuero granulado, costuras hundidas, luz de estudio) montado sobre la misma geometría SVG que lo coloca; sin WebGL, la placa SVG sigue contando todo.\n\nLa densidad es de lámina, no de catálogo: una imagen domina cada sección a sangre y el texto se apoya en ella (sobre la línea del suelo, junto al nodo que anota). El único pigmento es el naranja del cuero; todo lo demás es tinta plata sobre albúmina, o tinta oscura sobre papel en las copias. La tipografía separa dos voces sin mezclarlas: Archivo condensada y pesada para afirmar, Martian Mono para medir.\n\nLo que el sistema rechaza, por evidencia del build: el producto flotando en el vacío sobre negro con un resplandor permanente, y la rejilla de tarjetas de características. Los ejercicios se muestran como una sola sesión cronometrada que el balón recorre en vista lateral, con su cuaderno al lado; las especificaciones, como una ficha tabulada con filetes.",
     "keyCharacteristics": [
       "Fondo de placa único con cuadrícula doble (45px / 180px) que recorre toda la página, bajo un grano de emulsión animado.",
       "Un solo pigmento: el cuero del balón, usado para acción, énfasis y la medida activa; la luz del destello es cuero hecho luz.",
@@ -669,7 +673,7 @@
       "Anotaciones con línea guía y punto de anclaje en lugar de tarjetas o etiquetas sueltas, también proyectadas sobre las escenas 3D.",
       "Movimiento por exposiciones: imagen latente, destello con halo cálido y estela que se apaga; las cifras ruedan, no saltan.",
       "Balón 3D real sobre la geometría SVG, con la placa SVG como respaldo completo.",
-      "Copias en positivo (papel claro, tinta oscura) dentro del mundo en negativo: hoja de contactos y copia revelada.",
+      "Una copia en positivo (papel claro, tinta oscura) dentro del mundo en negativo: la copia revelada del cierre.",
       "Versión estática completa con `prefers-reduced-motion`: todas las exposiciones impresas, grano quieto, sin intro."
     ],
     "rules": [
@@ -685,7 +689,7 @@
       },
       {
         "name": "The Positive Print Rule",
-        "body": "Dentro del mundo en negativo, una copia es papel claro con tinta oscura (print-paper, print-ink, print-ink-dim). Sobre el papel el balón conserva su cuero, pero el halo del destello no existe: una copia ya está revelada, no se expone.",
+        "body": "Dentro del mundo en negativo, una copia es papel claro con tinta oscura (print-paper, print-ink). Sobre el papel el balón conserva su cuero, pero el halo del destello no existe: una copia ya está revelada, no se expone.",
         "section": "colors"
       },
       {
@@ -705,7 +709,7 @@
       },
       {
         "name": "The Flat Plate Rule",
-        "body": "Ningún panel ni superficie de interfaz se eleva sobre la placa; se distinguen con fondo opaco y filete, nunca con sombra o desenfoque. Solo proyectan sombra los objetos: el botón primario (calor propio) y las copias en papel (sombra de papel apoyado).",
+        "body": "Ningún panel ni superficie de interfaz se eleva sobre la placa; se distinguen con fondo opaco y filete, nunca con sombra o desenfoque. Solo proyectan sombra los objetos: el botón primario (calor propio) y la copia en papel (sombra de papel apoyado).",
         "section": "elevation"
       },
       {
@@ -722,7 +726,7 @@
       "**Do** dar a todo lo interactivo forma de píldora y a todo lo que mide o se imprime esquina viva.",
       "**Do** montar cualquier balón 3D nuevo sobre un balón SVG que marque su posición, giro y opacidad, para que la página siga completa sin WebGL.",
       "**Do** presentar los resultados como copias en positivo: papel claro, tinta oscura, sombra de papel, sin halo.",
-      "**Do** ofrecer con `prefers-reduced-motion` el relato completo impreso: todas las exposiciones visibles, grano quieto, sin intro, sin pin ni scroll horizontal."
+      "**Do** ofrecer con `prefers-reduced-motion` el relato completo impreso: todas las exposiciones visibles, grano quieto, sin intro, sin pin; la sesión queda en su estado final (cuaderno completo, reloj en 04:00)."
     ],
     "donts": [
       "**Don't** añadir un segundo color con croma; el cuero es el único pigmento, y la luz cálida solo existe como destello o como foco sobre el suelo.",
