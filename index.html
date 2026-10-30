@@ -264,28 +264,43 @@
     </section>
 
     <!-- 4 · El bote -->
+    <!-- Un solo balón que bota con física real al hacer scroll; un único panel
+         donde el sensor va escribiendo fuerza, velocidad y la gráfica de ritmo -->
     <section class="dribble" id="bote" aria-labelledby="bote-h">
-      <div class="section-head">
-        <h2 id="bote-h">El bote también habla.</h2>
-        <p>Cada contacto con el suelo queda registrado: con cuánta fuerza y cada cuánto. Tu ritmo de dribling, exposición a exposición.</p>
-      </div>
-      <div class="dribble-plate">
-        <svg id="dribblePlate" viewBox="0 0 1400 560" role="img" aria-label="Siete botes, cada uno con su fuerza de impacto">
-          <rect width="1400" height="560" fill="url(#grid)"/>
-          <line x1="0" y1="470" x2="1400" y2="470" class="floor"/>
-          <g id="dribbleTrack"></g>
-        </svg>
-        <!-- lo que lee el sensor: un pico por impacto; la altura es la fuerza y la separación, el ritmo -->
-        <svg id="signalPlate" class="signal" viewBox="0 0 1400 240" role="img"
-             aria-label="Señal del acelerómetro: un pico por cada bote; la altura del pico es la fuerza y la separación entre picos, el ritmo">
-          <line x1="0" y1="180" x2="1400" y2="180" class="signal-base"/>
-          <path id="signalPath" class="signal-line"/>
-          <g class="signal-notes" id="signalNotes"></g>
-        </svg>
-        <div class="dribble-foot">
-          <p class="synthetic">Datos de demostración · fuerza de impacto en newtons · señal del acelerómetro</p>
-          <p class="tempo">Ritmo <b>2,4</b> botes/s</p>
+      <div class="stage">
+        <div class="dribble-copy">
+          <h2 id="bote-h">El bote también habla.</h2>
+          <p>Un balón, siete botes. En cada contacto con el suelo el sensor anota con cuánta fuerza llega, a qué velocidad sale y cada cuánto vuelve a la mano.</p>
         </div>
+
+        <!-- 1 m = 500 unidades; suelo en y = 600 -->
+        <svg class="bounce-plate" id="bouncePlate" viewBox="0 60 600 580" preserveAspectRatio="xMidYMax meet" role="img"
+             aria-label="Un balón botando sobre el suelo, con una regla en metros">
+          <g class="bounce-ruler" id="bounceRuler" aria-hidden="true"></g>
+          <ellipse id="bounceShadow" class="bounce-shadow" cx="300" cy="602" rx="60" ry="7"/>
+          <line id="bounceImpact" class="bounce-impact" x1="300" y1="604" x2="300" y2="604"/>
+          <line x1="0" y1="600" x2="600" y2="600" class="floor"/>
+          <g id="bounceBallLayer"></g>
+        </svg>
+
+        <aside class="bounce-panel" aria-label="Lectura del sensor en este bote">
+          <div class="readout-head"><span>Bote</span><span><b id="bN">1</b> / 7</span></div>
+          <p class="bounce-force"><span class="k">Fuerza del último impacto</span><span class="v"><b id="bF">—</b> N</span></p>
+          <dl>
+            <dt>Velocidad</dt><dd id="bV">0,00 m/s</dd>
+            <dt>Sentido</dt><dd id="bDir">bajando</dd>
+            <dt>Ritmo</dt><dd id="bR">2,45 botes/s</dd>
+          </dl>
+          <svg class="bounce-chart" id="bounceChart" viewBox="0 0 360 150" role="img"
+               aria-label="Gráfica de fuerza en el tiempo: un pico por bote; la altura es la fuerza y la separación, el ritmo">
+            <defs><clipPath id="chartClip"><rect id="chartReveal" x="0" y="0" width="0" height="150"/></clipPath></defs>
+            <g class="chart-axis" id="chartAxis"></g>
+            <path id="chartTrace" class="chart-trace" clip-path="url(#chartClip)"/>
+            <line id="chartCursor" class="chart-cursor" x1="0" y1="10" x2="0" y2="126"/>
+            <g id="chartRhythm" class="chart-rhythm"><path/><text text-anchor="middle"></text></g>
+          </svg>
+          <p class="synthetic">Concepto · datos de demostración</p>
+        </aside>
       </div>
     </section>
 

@@ -22,7 +22,7 @@ npm run preview  # sirve dist/ para probarla
 | La idea | Una frase que se ilumina palabra a palabra |
 | Por dentro | Vista explosionada en 3D: cámara, 6 tirantes y módulo de sensores, con etiquetas que siguen a cada pieza |
 | El tacto no cambia | Primer plano del cuero con luz rasante, desenfoque de bordes y barra de escala de 10 mm |
-| El bote | Siete botes con su fuerza y la señal del acelerómetro dibujándose al ritmo |
+| El bote | Un solo balón 3D que bota con física real; un panel anota fuerza del impacto, velocidad, sentido y una gráfica de fuerza y ritmo en vivo |
 | Ejercicios | Hoja de contactos horizontal con copias en positivo |
 | Acabados | Cuero, Noche y Asfalto: el balón entra rodando y cambian los materiales de todos los balones 3D |
 | Cierre | El balón bajo un foco; al apuntarte se revela una copia con tu primer tiro |
@@ -47,7 +47,7 @@ src/js/
   shot.js               el tiro: el scroll añade exposiciones; lectura con cifras que ruedan
   idea.js               la frase que se ilumina
   inside.js             vista explosionada en SVG (plan B sin WebGL)
-  dribble.js            los botes y la señal del acelerómetro
+  dribble.js            el bote: física (gravedad, restitución, aplastamiento) y panel del sensor
   sessions.js           hoja de contactos en horizontal
   finishes.js           selector de acabado y entrada rodando
   waitlist.js           formulario de demostración y copia revelada
@@ -84,3 +84,12 @@ PRODUCT.md / DESIGN.md  ficha del producto y sistema de diseño
 - **`@property`** para animar variables CSS de color.
 
 Los datos que aparecen son de demostración y VORTEX no existe.
+
+## Versiones guardadas
+
+La primera versión de la sección del bote (siete botes en fila y la señal del acelerómetro debajo) está guardada en la etiqueta `bote-v1`. Para verla o recuperar sus archivos:
+
+```bash
+git checkout bote-v1                         # ver el proyecto tal como estaba
+git checkout bote-v1 -- src/js/dribble.js    # traer solo un archivo de esa versión
+```

@@ -286,34 +286,41 @@ function mountOverSvg(svg, selector) {
         el.classList.add("b3d");
         const mesh = new THREE.Mesh(geo, makeBallMaterial({ transparent: true }));
         mesh.rotation.copy(BASE_ROTATION);
+        // fuera: posición y escala (también el aplastamiento, siempre en vertical);
+        // dentro: el giro del balón, que no debe torcer el aplastamiento
+        const spin = new THREE.Group();
+        spin.add(mesh);
         ball = new THREE.Group();
-        ball.add(mesh);
+        ball.add(spin);
+        ball.userData = { spin, mesh };
         scene.add(ball);
         balls.set(el, ball);
       }
+      const { spin, mesh } = ball.userData;
       const use = el.querySelector("use");
       const r = (parseFloat(use?.getAttribute("width")) || 64) * 30 / 64;
       const ctm = el.getCTM();
       if (!ctm) return;
       const s = Math.hypot(ctm.a, ctm.b);
+      const sq = el.squash ?? { x: 1, y: 1 };
       ball.position.set(ctm.e, -ctm.f, 0);
-      ball.scale.setScalar(r * s);
-      ball.rotation.z = -Math.atan2(ctm.b, ctm.a);
-      const mat = ball.children[0].material;
+      ball.scale.set(r * s * sq.x, r * s * sq.y, r * s * sq.x);
+      spin.rotation.z = -Math.atan2(ctm.b, ctm.a);
+      const mat = mesh.material;
       mat.opacity = opacityOf(el, svg);
       // una exposición translúcida no tapa a las demás: se pinta detrás y sin profundidad,
       // así dos balones que se solapan no se cortan con un borde recto
       const solid = mat.opacity > .98;
       mat.depthWrite = solid;
-      ball.children[0].renderOrder = solid ? 1 : 0;
+      mesh.renderOrder = solid ? 1 : 0;
       mat.emissiveIntensity = (el.glow?.v ?? 0) * .6;
       ball.visible = mat.opacity > .005;
     });
     balls.forEach((ball, el) => {
       if (seen.has(el)) return;
       scene.remove(ball);
-      tiers.lo.mats.delete(ball.children[0].material);
-      ball.children[0].material.dispose();
+      tiers.lo.mats.delete(ball.userData.mesh.material);
+      ball.userData.mesh.material.dispose();
       balls.delete(el);
     });
   }

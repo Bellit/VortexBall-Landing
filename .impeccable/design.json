@@ -369,7 +369,7 @@
       },
       "measure-label": {
         "displayName": "Medida en píxeles",
-        "purpose": "Valores dibujados a tamaño de pantalla: líneas guía sobre el 3D, notas de la señal, etiquetas de diagrama."
+        "purpose": "Valores dibujados a tamaño de pantalla: líneas guía sobre el 3D, regla del bote, etiquetas de diagrama."
       },
       "measure-key-small": {
         "displayName": "Clave pequeña",
@@ -501,7 +501,7 @@
       },
       {
         "name": "dribble-narrow",
-        "value": "max-width: 700px (viewBox del bote y de la señal, en JS)"
+        "value": "max-aspect-ratio: 1/1 (bote en vertical: panel compacto abajo)"
       },
       {
         "name": "hi-texture",

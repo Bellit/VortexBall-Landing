@@ -200,7 +200,7 @@ Lo que el sistema rechaza, por evidencia del build: el producto flotando en el v
 Monocromo cálido de plata sobre albúmina con un único pigmento, el cuero, y su papel de copia como negativo invertido.
 
 ### Primary
-- **Cuero de balón** (leather): el único color de la página. CTA, palabra de énfasis en titulares (`em`), número de exposición activa en la lectura, impactos del bote, línea de la señal del acelerómetro, conos, aristas del módulo de sensores, opción de acabado seleccionada, ondas del sonido activo, anillo de foco, selección de texto y cursor del campo.
+- **Cuero de balón** (leather): el único color de la página. CTA, palabra de énfasis en titulares (`em`), número de exposición activa en la lectura, impactos del bote, número de bote y línea de la gráfica de fuerza, conos, aristas del módulo de sensores, opción de acabado seleccionada, ondas del sonido activo, anillo de foco, selección de texto y cursor del campo.
 - **Cuero encendido** (leather-hover): solo el estado hover del botón primario.
 
 ### Secondary: el papel de copia
@@ -218,7 +218,7 @@ Monocromo cálido de plata sobre albúmina con un único pigmento, el cuero, y s
 - **Tinta plata** (silver): texto principal, titulares, valores medidos, líneas de anotación, aro, suelo, regla de escala de la macro y número actual del contador.
 - **Plata apagada** (silver-dim): texto secundario (entradillas, leyendas, claves de medida, enlaces de navegación en reposo, contador de fotogramas, interruptor de sonido en reposo, pie, etiquetas de demostración). Contraste suficiente sobre albúmina para texto pequeño.
 - **Cuadrícula fina** (grid): la retícula menor de 45px y filetes internos discretos.
-- **Cuadrícula mayor** (grid-strong): la retícula de 180px y todos los filetes estructurales: borde de la lectura, bordes de la hoja de contactos, línea superior y base de la señal, filas de la ficha, borde del campo y de las opciones, línea superior del cierre y del pie.
+- **Cuadrícula mayor** (grid-strong): la retícula de 180px y todos los filetes estructurales: borde de la lectura, bordes de la hoja de contactos, borde del panel del bote y base de su gráfica, filas de la ficha, borde del campo y de las opciones, línea superior del cierre y del pie.
 
 ### Named Rules
 **The One Pigment Rule.** El cuero es el único color con croma de la página. Cualquier otro elemento es plata, plata apagada, albúmina o la tinta del papel de copia. La luz no cuenta como pigmento: el halo del destello (blanco cálido → ámbar → cuero), el foco del cierre y el brillo del balón 3D son cuero hecho luz, y solo existen como destello que se apaga o como luz que cae sobre el suelo. Si algo nuevo necesita destacar, usa cuero o no destaca.
@@ -244,7 +244,7 @@ Monocromo cálido de plata sobre albúmina con un único pigmento, el cuero, y s
 - **Label botón** (700, 15px, 1, anchura 110%): botones; 13px en la variante pequeña.
 - **Wordmark** (800, 18px, anchura 125%, +0.02em): solo la marca VORTEX.
 - **Medida** (Martian Mono 400, 15px valor / 12px clave, clave en mayúsculas +0.04em, cifras tabulares): anotaciones en el viewBox de la placa, lectura del sensor, regla en metros, ritmo.
-- **Medida en píxeles** (Martian Mono 400, 14px valor / 11px clave +0.04em): etiquetas dibujadas a tamaño de pantalla (líneas guía sobre el 3D, notas de la señal, etiquetas de diagrama), cabecera de la lectura y contador de fotogramas (11px, tabulares).
+- **Medida en píxeles** (Martian Mono 400, 14px valor / 11px clave +0.04em): etiquetas dibujadas a tamaño de pantalla (líneas guía sobre el 3D, regla del bote, etiquetas de diagrama), cabecera de la lectura y contador de fotogramas (11px, tabulares).
 - **Advertencia** (Martian Mono 400, 11px, +0.02em, plata apagada): "Concepto · datos de demostración" junto a cada dato inventado; también los bordes de fotograma.
 
 ### Named Rules
@@ -262,7 +262,7 @@ Una placa continua: la cuadrícula del `body` (45px menor, 180px mayor) corre ba
 - **Láminas a sangre:** tiro, vista explosionada y macro son escenarios fijos (sticky) de 100svh dentro de secciones de 340vh, 300vh y 260vh; la ilustración se recorta con `slice` (o la escena 3D llena el escenario) y el viñeteado cae sobre todas.
 - **Apoyo en el suelo:** en horizontal, el texto del héroe y la lectura se apoyan sobre la línea del suelo de la placa (`--above-floor`, calculado en JS) y el texto deja libre la regla en metros (mín. 88px a la izquierda). En la macro, texto abajo a la izquierda y barra de escala abajo a la derecha, a `clamp(48px, 10vh, 110px)` del borde.
 - **Cabecera de sección:** dos columnas iguales alineadas abajo (titular | entradilla), separadas 48px; una columna bajo 860px.
-- **Bote:** placa de botes y, pegada debajo, la placa de señal del acelerómetro con el mismo ancho y eje x; pie con advertencia y ritmo.
+- **Bote:** escena fija de 320vh. Título arriba a la izquierda, un solo balón botando sobre su placa con regla en metros en el centro, y el panel del sensor a la derecha (abajo y compacto en vertical).
 - **Hoja de contactos:** fila horizontal de copias de `min(72vw, 820px)` (86vw en móvil), separadas 14px dentro de una tira con 14px de margen entre filetes; desplazada por scroll; en movimiento reducido se envuelve y centra.
 - **Acabados:** dos columnas (balón | elección y ficha), una bajo 860px.
 - **Cierre:** balón en reposo centrado (`min(56vw, 420px)`), titular, formulario y, al apuntarse, la copia revelada debajo.
@@ -328,8 +328,8 @@ El balón se abre por su costura central; aparecen la cámara translúcida, seis
 ### Macro "El tacto no cambia"
 La cámara se acerca del balón entero al cruce de costuras y la luz principal baja hasta rasante para que cada grano proyecte sombra. Un anillo de profundidad de campo (desenfoque de 7px enmascarado en elipse) crece con la cercanía; una barra de escala de 10 mm medida en vivo aparece en la segunda mitad. El texto se apoya sobre un velo de albúmina oscura que sube desde abajo.
 
-### Señal del acelerómetro
-Bajo la placa del bote, una línea cuero de 2px que dibuja la señal sintética (un pico por impacto; altura = fuerza, separación = ritmo) sobre una base grid-strong, trazada con el scroll. Dos notas mono de 14px bastan: "pico = fuerza" y el corchete del ritmo.
+### Panel del bote
+Un solo instrumento junto al balón: fondo albúmina, filete grid-strong, todo en Martian Mono con cifras tabulares. Cabecera con el número de bote en cuero; la fuerza del último impacto como cifra grande (44px, 32px en móvil) que rueda hasta su valor; velocidad, sentido y ritmo en filas clave/valor; y una gráfica de fuerza en el tiempo (línea cuero de 1,6px, rejilla discontinua, cursor punteado) que se revela hasta el instante actual, con un corchete bajo los dos últimos picos que marca el ritmo. Cada impacto dispara el destello del balón y una línea cuero que se abre en el suelo.
 
 ### Hoja de contactos (copias en positivo)
 Una tira en negativo entre filetes grid-strong con copias en papel separadas 14px. Cada copia: borde de película en mono 11px tinta apagada (exposiciones y duración), diagrama en tinta oscura, título, párrafo y línea de medidas en mono 12px. Los conos siguen en cuero; los balones se exponen con destello al entrar en el centro, sin halo.

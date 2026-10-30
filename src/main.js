@@ -56,6 +56,7 @@ const ball3d = Promise.all([import("./js/ball3d.js"), import("./js/inside3d.js")
       [document.getElementById("shotPlate"), "#exposures > g"],
       [document.querySelector(".finishes-ball svg"), "#finishBall, #finishGhosts > g"],
       [document.querySelector(".close-ball svg"), "#closeBall"],
+      [document.getElementById("bouncePlate"), "#dribbleBall"],
     ]);
     if (!mounted.length) return null;   // sin WebGL: todo sigue en SVG
     initInside3D(opts);
