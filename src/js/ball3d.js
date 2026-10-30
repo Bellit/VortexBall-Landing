@@ -5,8 +5,8 @@ import { gsap } from "gsap";
 // ---------------------------------------------------------------------------
 // El balón en 3D. Aquí vive lo compartido por todas las escenas: texturas del
 // cuero, material por acabado y luz de estudio. Además, `initBall3D` monta una
-// capa WebGL encima de las placas SVG (tiro y acabados): los balones SVG siguen
-// marcando posición, giro y opacidad, y esta capa dibuja un balón real en su sitio.
+// capa WebGL encima de las placas SVG (tiro, acabados y cierre): los balones SVG
+// siguen marcando posición, giro y opacidad, y esta capa dibuja un balón real.
 // ---------------------------------------------------------------------------
 
 const FINISHES = {
@@ -18,9 +18,14 @@ const FINISHES = {
 const SEAM_HALF = .03;            // media anchura de la costura, en radianes
 const CURVE = .92;                // radio angular de las costuras curvas
 
-let maps = null;                  // ruido, máscara de costuras y relieve
-let colorCache = {};
-const materials = new Set();
+// Dos niveles de textura: "lo" (1536 px) para los balones que se ven pequeños o
+// medianos, y "hi" (3072 px) solo para el primer plano. Cada escena tiene su
+// propio contexto WebGL, así que subir la textura grande a todas sería tirar memoria.
+// Mientras "hi" no está lista, sus materiales usan la de "lo".
+const tiers = {
+  lo: { maps: null, cache: {}, current: null, mats: new Set(), renderers: new Set() },
+  hi: { maps: null, cache: {}, current: null, mats: new Set(), renderers: new Set() },
+};
 let finish = document.documentElement.dataset.finish || "cuero";
 
 const yieldFrame = () => new Promise(r => setTimeout(r, 0));
@@ -74,6 +79,7 @@ async function buildMaps(TW, chunked = false) {
     const h = (.5 + .5 * n) * (1 - Math.min(1, seam[i] * 1.5));
     bd.data[i * 4] = bd.data[i * 4 + 1] = bd.data[i * 4 + 2] = h * 255;
     bd.data[i * 4 + 3] = 255;
+    if (chunked && i % 300000 === 299999) await yieldFrame();
   }
   bc.putImageData(bd, 0, 0);
   const bumpTex = new THREE.CanvasTexture(bump);
@@ -81,37 +87,48 @@ async function buildMaps(TW, chunked = false) {
   return { TW, TH, noise, seam, bumpTex };
 }
 
-function colorTexture(name) {
-  if (colorCache[name]) return colorCache[name];
-  const { TW, TH } = maps;
+// Color del cuero para un acabado, también en trozos para no frenar el scroll
+async function buildColor(m, name, chunked) {
+  const { TW, TH } = m;
   const { base, seam: sc } = FINISHES[name];
   const c = document.createElement("canvas");
   c.width = TW; c.height = TH;
   const ctx = c.getContext("2d");
   const img = ctx.createImageData(TW, TH);
   for (let i = 0; i < TW * TH; i++) {
-    const n = maps.noise[i * 4] / 255;
-    const s = Math.min(1, Math.max(0, (maps.seam[i] - .3) / .35));   // borde suave
-    const k = .84 + .26 * n;                                         // el grano varía el tono
+    const n = m.noise[i * 4] / 255;
+    const s = Math.min(1, Math.max(0, (m.seam[i] - .3) / .35));   // borde suave
+    const k = .84 + .26 * n;                                      // el grano varía el tono
     for (let ch = 0; ch < 3; ch++) {
       img.data[i * 4 + ch] = Math.min(255, base[ch] * k) * (1 - s) + sc[ch] * s;
     }
     img.data[i * 4 + 3] = 255;
+    if (chunked && i % 200000 === 199999) await yieldFrame();
   }
   ctx.putImageData(img, 0, 0);
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.wrapS = THREE.RepeatWrapping;
   tex.anisotropy = 8;
-  return (colorCache[name] = tex);
+  return tex;
 }
 
+// La caché guarda promesas: si dos partes piden el mismo acabado, se calcula una vez
+const colorFor = (tier, name, chunked = true) => (tier.cache[name] ??= buildColor(tier.maps, name, chunked));
+
+// Textura de color y relieve que usa ahora un nivel (o la de "lo" si aún no tiene)
+const texturesOf = tier => tier.maps && tier.current
+  ? { map: tier.current, bump: tier.maps.bumpTex }
+  : { map: tiers.lo.current, bump: tiers.lo.maps.bumpTex };
+
 // Material del cuero con el acabado actual. Todos se actualizan juntos.
-export function makeBallMaterial(extra = {}) {
+export function makeBallMaterial(extra = {}, level = "lo") {
+  const tier = tiers[level];
   const f = FINISHES[finish];
+  const { map, bump } = texturesOf(tier);
   const m = new THREE.MeshPhysicalMaterial({
-    map: colorTexture(finish),
-    bumpMap: maps.bumpTex,
+    map,
+    bumpMap: bump,
     bumpScale: 3,
     roughness: f.roughness,
     clearcoat: f.clearcoat,
@@ -121,31 +138,39 @@ export function makeBallMaterial(extra = {}) {
     emissiveIntensity: 0,
     ...extra,
   });
-  materials.add(m);
+  tier.mats.add(m);
   return m;
 }
 
-function refreshMaterials() {
+function refresh() {
   const f = FINISHES[finish];
-  const map = colorTexture(finish);
-  materials.forEach(m => {
-    m.map = map;
-    m.bumpMap = maps.bumpTex;
-    m.roughness = f.roughness;
-    m.clearcoat = f.clearcoat;
-    m.needsUpdate = true;
+  Object.values(tiers).forEach(tier => {
+    const { map, bump } = texturesOf(tier);
+    tier.mats.forEach(m => {
+      m.map = map;
+      m.bumpMap = bump;
+      m.roughness = f.roughness;
+      m.clearcoat = f.clearcoat;
+      m.needsUpdate = true;
+    });
+    // subir ya las texturas nuevas a la GPU, no en el primer fotograma visible
+    tier.renderers.forEach(r => { r.initTexture(map); r.initTexture(bump); });
   });
 }
 
-function setFinish(name) {
+async function setFinish(name) {
   if (!FINISHES[name] || name === finish) return;
   finish = name;
-  refreshMaterials();
+  for (const tier of Object.values(tiers)) {
+    if (!tier.maps) continue;
+    const tex = await colorFor(tier, name);
+    if (finish !== name) return;   // mientras tanto se eligió otro acabado
+    tier.current = tex;
+  }
+  refresh();
 }
 
-// Renderer con el tono de color de toda la web y luz de estudio:
-// principal cálida arriba a la izquierda, contorno por detrás a la derecha
-// para recortar la silueta sobre el fondo oscuro, y un relleno suave.
+// Renderer con el tono de color de toda la web
 export function createRenderer() {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -156,6 +181,8 @@ export function createRenderer() {
   return renderer;
 }
 
+// Luz de estudio: principal cálida arriba a la izquierda, contorno por detrás a
+// la derecha para recortar la silueta sobre el fondo oscuro, y un relleno suave
 export function studioScene(renderer) {
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
@@ -167,6 +194,17 @@ export function studioScene(renderer) {
   const fill = new THREE.HemisphereLight("#d8cfc0", "#1c1611", .35);
   scene.add(key, rim, fill);
   return { scene, key, rim, fill };
+}
+
+// Precalienta una escena al montarla: compila los shaders y sube las texturas.
+// Sin esto, la primera vez que una sección entra en pantalla el scroll da un tirón.
+export function warmUp(renderer, scene, camera, level = "lo") {
+  const tier = tiers[level];
+  tier.renderers.add(renderer);
+  const { map, bump } = texturesOf(tier);
+  renderer.initTexture(map);
+  renderer.initTexture(bump);
+  renderer.compileAsync(scene, camera).catch(() => {});
 }
 
 // Dibuja la escena en cada fotograma solo mientras `el` está en pantalla
@@ -237,12 +275,12 @@ function mountOverSvg(svg, selector) {
       }
       const use = el.querySelector("use");
       const r = (parseFloat(use?.getAttribute("width")) || 64) * 30 / 64;
-      const m = el.getCTM();
-      if (!m) return;
-      const s = Math.hypot(m.a, m.b);
-      ball.position.set(m.e, -m.f, 0);
+      const ctm = el.getCTM();
+      if (!ctm) return;
+      const s = Math.hypot(ctm.a, ctm.b);
+      ball.position.set(ctm.e, -ctm.f, 0);
       ball.scale.setScalar(r * s);
-      ball.rotation.z = -Math.atan2(m.b, m.a);
+      ball.rotation.z = -Math.atan2(ctm.b, ctm.a);
       const mat = ball.children[0].material;
       mat.opacity = opacityOf(el, svg);
       // una exposición translúcida no tapa a las demás: se pinta detrás y sin profundidad,
@@ -256,30 +294,33 @@ function mountOverSvg(svg, selector) {
     balls.forEach((ball, el) => {
       if (seen.has(el)) return;
       scene.remove(ball);
-      materials.delete(ball.children[0].material);
+      tiers.lo.mats.delete(ball.children[0].material);
       ball.children[0].material.dispose();
       balls.delete(el);
     });
   }
 
+  sync();
+  warmUp(renderer, scene, camera);
   renderWhileVisible(svg, () => { sync(); renderer.render(scene, camera); });
   return canvas;
 }
 
 // Prepara las texturas y monta la capa 3D en las placas indicadas.
-// En pantallas grandes, después sube la textura a más resolución (para el macro).
+// En pantallas grandes, después calcula la textura grande para el primer plano.
 export async function initBall3D(targets) {
-  maps = await buildMaps(1536);
+  const lo = tiers.lo;
+  lo.maps = await buildMaps(1536);
+  lo.current = await colorFor(lo, finish, false);
   document.addEventListener("finishchange", e => setFinish(e.detail));
   const mounted = targets.map(([svg, selector]) => mountOverSvg(svg, selector)).filter(Boolean);
   if (innerWidth > 800) {
-    buildMaps(3072, true).then(hi => {
-      const old = [maps.bumpTex, ...Object.values(colorCache)];
-      maps = hi;
-      colorCache = {};
-      refreshMaterials();
-      old.forEach(t => t.dispose());
-    });
+    (async () => {
+      const hi = tiers.hi;
+      hi.maps = await buildMaps(3072, true);
+      hi.current = await colorFor(hi, finish);
+      refresh();
+    })();
   }
   return mounted;
 }

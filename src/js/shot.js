@@ -79,12 +79,19 @@ export function initShot({ reduce }) {
   portrait.addEventListener("change", layout);
   addEventListener("resize", layout);
 
-  function readout(i) {
+  // Las cifras no saltan: ruedan hasta su nuevo valor, como un contador mecánico
+  const shown = { exp: 1, h: (FLOOR - P0[1]) / M, d: 0, t: 0 };
+  const print = () => {
+    out.exp.textContent = String(Math.round(shown.exp)).padStart(2, "0");
+    out.h.textContent = `${fmt(shown.h)} m`;
+    out.d.textContent = `${fmt(shown.d)} m`;
+    out.t.textContent = `${fmt(shown.t)} s`;
+  };
+  function readout(i, instant = reduce) {
     const [x, y] = quad(P0, C, P2, i / (N - 1));
-    out.exp.textContent = String(i + 1).padStart(2, "0");
-    out.h.textContent = `${fmt((FLOOR - y) / M)} m`;
-    out.d.textContent = `${fmt((x - P0[0]) / M)} m`;
-    out.t.textContent = `${fmt(FLIGHT * i / (N - 1))} s`;
+    const target = { exp: i + 1, h: (FLOOR - y) / M, d: (x - P0[0]) / M, t: FLIGHT * i / (N - 1) };
+    if (instant) { Object.assign(shown, target); print(); return; }
+    gsap.to(shown, { ...target, duration: .45, ease: "power2.out", overwrite: true, onUpdate: print });
   }
 
   if (reduce) {

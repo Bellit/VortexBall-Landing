@@ -1,4 +1,5 @@
 import { gsap } from "gsap";
+import { shutter } from "./sound.js";
 
 export const NS = "http://www.w3.org/2000/svg";
 
@@ -36,6 +37,7 @@ export function ballAt(parent, x, y, r = 30, rot = 0) {
 // de un estroboscopio sobre la emulsión.
 export function flash(target) {
   if (!target) return;
+  shutter();
   const { cx, cy, r } = target.dataset;
   if (cx !== undefined && target.parentNode) {
     const halo = svgEl("circle", { cx, cy, r: r * 2.8, fill: "url(#halo)", class: "halo" });

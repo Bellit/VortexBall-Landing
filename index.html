@@ -67,15 +67,25 @@
   <a class="skip" href="#contenido">Saltar al contenido</a>
 
   <header class="nav">
-    <a class="wordmark" href="#tiro" aria-label="VORTEX, volver al inicio">
-      <svg viewBox="-32 -32 64 64" aria-hidden="true"><use href="#ball" x="-32" y="-32" width="64" height="64"/></svg>VORTEX
-    </a>
+    <div class="nav-left">
+      <a class="wordmark" href="#tiro" aria-label="VORTEX, volver al inicio">
+        <svg viewBox="-32 -32 64 64" aria-hidden="true"><use href="#ball" x="-32" y="-32" width="64" height="64"/></svg>VORTEX
+      </a>
+      <!-- contador de película: avanza con el scroll, como el de una cámara -->
+      <span class="frame-count" aria-hidden="true"><span id="frameCount">000</span>/144</span>
+    </div>
     <nav aria-label="Principal">
       <ul>
         <li><a href="#dentro">Por dentro</a></li>
         <li><a href="#bote">Bote</a></li>
         <li><a href="#ejercicios">Ejercicios</a></li>
         <li><a href="#acabados">Acabados</a></li>
+        <li class="keep">
+          <button class="sound" type="button" aria-pressed="false" aria-label="Sonido de obturador">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 8h3l4-3.5v11L6 12H3z"/><path class="wave" d="M13 7.5a3.5 3.5 0 0 1 0 5M15.5 5a7 7 0 0 1 0 10"/></svg>
+            <span class="sound-label">Sonido</span>
+          </button>
+        </li>
         <li><a class="btn small" href="#lista">Apúntate</a></li>
       </ul>
     </nav>
@@ -362,6 +372,14 @@
 
     <!-- 7 · Cierre -->
     <section class="close" id="lista" aria-labelledby="lista-h">
+      <!-- el balón en reposo bajo un foco: la página termina con el objeto -->
+      <div class="close-ball">
+        <svg viewBox="-70 -36 140 72" aria-hidden="true">
+          <ellipse cx="0" cy="30.5" rx="24" ry="2.4" class="contact"/>
+          <g id="closeBall" data-cx="0" data-cy="0" data-r="30"><use href="#ball" x="-32" y="-32" width="64" height="64"/></g>
+          <line x1="-70" y1="30" x2="70" y2="30" class="floor thin"/>
+        </svg>
+      </div>
       <h2 id="lista-h">Tira. VORTEX mide.</h2>
       <p>VORTEX es un concepto. Déjanos tu correo y te contamos cómo se construyó esta página.</p>
       <form class="waitlist" novalidate>
@@ -370,6 +388,12 @@
         <button class="btn" type="submit">Apuntarme</button>
       </form>
       <p class="waitlist-msg" role="status"></p>
+
+      <!-- al apuntarse se "revela" una copia en papel con tu primer tiro -->
+      <figure class="print" hidden>
+        <svg class="print-plate" viewBox="0 0 600 260" aria-hidden="true"></svg>
+        <figcaption><span class="print-name"></span><span class="print-date"></span></figcaption>
+      </figure>
     </section>
   </main>
 

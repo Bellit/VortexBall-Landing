@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { makeBallMaterial, createRenderer, studioScene, renderWhileVisible, BASE_ROTATION } from "./ball3d.js";
+import { makeBallMaterial, createRenderer, studioScene, renderWhileVisible, warmUp, BASE_ROTATION } from "./ball3d.js";
 
 // ---------------------------------------------------------------------------
 // Macro del detalle. La cámara se acerca desde el balón entero hasta el cruce
@@ -26,7 +26,8 @@ export function initMacro3D({ reduce }) {
   const { scene, key } = studioScene(renderer);
   const camera = new THREE.PerspectiveCamera(FOV, 1, .05, 50);
 
-  const ball = new THREE.Mesh(new THREE.SphereGeometry(1, 192, 128), makeBallMaterial());
+  // el único balón que usa la textura grande: es el que se ve de cerca
+  const ball = new THREE.Mesh(new THREE.SphereGeometry(1, 192, 128), makeBallMaterial({}, "hi"));
   scene.add(ball);
 
   // de la orientación de siempre a una que pone de frente el cruce de costuras (0, 0, 1)
@@ -61,6 +62,7 @@ export function initMacro3D({ reduce }) {
     section.style.setProperty("--macro", t);
   }
 
+  warmUp(renderer, scene, camera, "hi");
   if (!reduce) {
     ScrollTrigger.create({
       trigger: section, start: "top top", end: "bottom bottom",

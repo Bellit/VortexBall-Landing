@@ -20,6 +20,8 @@ import { initWaitlist } from "./js/waitlist.js";
 import { initGrain } from "./js/grain.js";
 import { initHeadingReveals } from "./js/lines.js";
 import { playIntro } from "./js/intro.js";
+import { initSound } from "./js/sound.js";
+import { initFrameCounter } from "./js/counter.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,7 +44,9 @@ initInside(opts);
 initDribble(opts);
 initSessions(opts);
 initFinishes(opts);
-initWaitlist();
+initWaitlist(opts);
+initSound();
+initFrameCounter();
 
 // El balón 3D (Three.js) se carga aparte para no frenar el resto de la página.
 // Si no llega en 1,5 s o no hay WebGL, la página sigue con los balones SVG.
@@ -51,6 +55,7 @@ const ball3d = Promise.all([import("./js/ball3d.js"), import("./js/inside3d.js")
     const mounted = await initBall3D([
       [document.getElementById("shotPlate"), "#exposures > g"],
       [document.querySelector(".finishes-ball svg"), "#finishBall, #finishGhosts > g"],
+      [document.querySelector(".close-ball svg"), "#closeBall"],
     ]);
     if (!mounted.length) return null;   // sin WebGL: todo sigue en SVG
     initInside3D(opts);

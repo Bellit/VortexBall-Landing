@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { makeBallMaterial, createRenderer, studioScene, renderWhileVisible } from "./ball3d.js";
+import { makeBallMaterial, createRenderer, studioScene, renderWhileVisible, warmUp } from "./ball3d.js";
 
 // ---------------------------------------------------------------------------
 // "Por dentro" en 3D. El balón se abre por su costura central (el plano x = 0)
@@ -185,6 +185,7 @@ export function initInside3D({ reduce }) {
     });
   }
 
+  warmUp(renderer, scene, camera);
   if (!reduce) {
     ScrollTrigger.create({
       trigger: section, start: "top top", end: "bottom bottom",
