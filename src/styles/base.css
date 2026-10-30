@@ -101,6 +101,33 @@ em { font-style: normal; color: var(--leather); }
 }
 .section-head p { color: var(--silver-dim); max-width: 34rem; font-size: 18px; }
 
+/* --- placa fotográfica: grano, máscaras de línea, halo --- */
+.grain {
+  position: fixed; inset: -120px; z-index: 30; pointer-events: none;
+  background-size: 220px 220px; opacity: .09; mix-blend-mode: overlay;
+  animation: grain .9s steps(6) infinite;
+}
+.grain.still { animation: none; }
+@keyframes grain {
+  0%   { transform: translate(0, 0); }
+  17%  { transform: translate(-48px, 30px); }
+  33%  { transform: translate(36px, -54px); }
+  50%  { transform: translate(-22px, 64px); }
+  67%  { transform: translate(60px, 12px); }
+  83%  { transform: translate(-64px, -28px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* cada línea de un titular es una ventana; el texto sube desde debajo */
+.line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
+.line-in { display: inline-block; will-change: transform; }
+
+.halo { mix-blend-mode: screen; pointer-events: none; }
+
+/* intro: el primer pantallazo espera a revelarse */
+.intro .hero-copy h1 { visibility: hidden; }
+.intro .hero-copy p, .intro .hero-copy .btn, .intro .nav, .intro .readout { opacity: 0; }
+
 .footer {
   display: flex; justify-content: space-between; gap: 8px;
   padding: 24px var(--gutter); background: var(--albumen);

@@ -17,6 +17,9 @@ import { initDribble } from "./js/dribble.js";
 import { initSessions } from "./js/sessions.js";
 import { initFinishes } from "./js/finishes.js";
 import { initWaitlist } from "./js/waitlist.js";
+import { initGrain } from "./js/grain.js";
+import { initHeadingReveals } from "./js/lines.js";
+import { playIntro } from "./js/intro.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,7 +35,8 @@ if (!reduce) {
 }
 
 const opts = { reduce };
-initShot(opts);
+initGrain(opts);
+const shot = initShot(opts);
 initIdea(opts);
 initInside(opts);
 initDribble(opts);
@@ -40,5 +44,10 @@ initSessions(opts);
 initFinishes(opts);
 initWaitlist();
 
-// las fuentes cambian medidas: recalcular los disparadores cuando estén listas
-document.fonts.ready.then(() => ScrollTrigger.refresh());
+// Partir titulares en líneas exige medir el texto con su fuente real:
+// por eso las máscaras y la intro esperan a que las fuentes estén listas.
+document.fonts.ready.then(() => {
+  initHeadingReveals(opts);
+  playIntro(shot);
+  ScrollTrigger.refresh();
+});

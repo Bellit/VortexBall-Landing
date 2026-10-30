@@ -9,6 +9,7 @@ const N = 13;          // exposiciones
 const FLIGHT = 1.12;   // segundos de vuelo
 const P0 = [220, 486], C = [800, -100], P2 = [1398, 338];
 const SHOWN_AT_START = 3;
+const LATENT = .07;    // imagen latente: las exposiciones futuras ya se intuyen en la placa
 
 export function initShot({ reduce }) {
   const plate = document.getElementById("shotPlate");
@@ -56,13 +57,15 @@ export function initShot({ reduce }) {
   const stage = plate.parentElement;
   function layout() {
     const p = portrait.matches;
+    const s = p ? 1.6 : 1;
     plate.classList.toggle("portrait", p);
     plate.setAttribute("preserveAspectRatio", p ? "xMidYMid meet" : "xMidYMid slice");
     plate.setAttribute("viewBox", p ? "150 70 1400 500" : "0 0 1600 1000");
     ruler.setAttribute("transform", p ? "translate(150 0)" : "");
     frames.forEach((g, i) => {
       const [x, y] = quad(P0, C, P2, i / (N - 1));
-      g.setAttribute("transform", `translate(${x} ${y}) rotate(${-i * 34}) scale(${p ? 1.6 : 1})`);
+      g.setAttribute("transform", `translate(${x} ${y}) rotate(${-i * 34}) scale(${s})`);
+      g.dataset.r = 30 * s;   // el halo del flash crece con el balón
     });
     // en horizontal, texto y lectura se apoyan sobre la línea del suelo de la placa
     if (!p) {
@@ -88,7 +91,20 @@ export function initShot({ reduce }) {
     frames.forEach((f, i) => { f.style.opacity = i === N - 1 ? 1 : .55; });
     notes.forEach(n => { n.style.opacity = 1; });
     readout(N - 1);
-    return;
+    return { intro: () => gsap.timeline() };
+  }
+
+  // Pinta la placa con `idx` como exposición actual: plena luz para ella,
+  // las anteriores se apagan y las futuras quedan como imagen latente
+  function paint(idx) {
+    frames.forEach((f, i) => {
+      const age = idx - i;
+      f.style.opacity = age < 0 ? LATENT : age === 0 ? 1 : Math.max(.28, .8 - age * .07);
+    });
+    notes.forEach(n => {
+      gsap.to(n, { opacity: idx >= +n.dataset.at ? 1 : 0, duration: .4, ease: "expo.out" });
+    });
+    readout(idx);
   }
 
   let current = -1;
@@ -97,16 +113,7 @@ export function initShot({ reduce }) {
     if (idx === current) return;
     const forward = idx > current;
     current = idx;
-    // la exposición actual a plena luz; las anteriores se apagan como en la placa
-    frames.forEach((f, i) => {
-      const age = idx - i;
-      f.style.opacity = age < 0 ? 0 : age === 0 ? 1 : Math.max(.28, .8 - age * .07);
-    });
-    notes.forEach(n => {
-      const on = idx >= +n.dataset.at;
-      gsap.to(n, { opacity: on ? 1 : 0, duration: .4, ease: "expo.out" });
-    });
-    readout(idx);
+    paint(idx);
     if (forward) flash(frames[idx]);
   }
   notes.forEach(n => { n.style.opacity = 0; });
@@ -121,4 +128,19 @@ export function initShot({ reduce }) {
     opacity: 0, y: -40, ease: "none",
     scrollTrigger: { trigger: ".shot", start: "12% top", end: "32% top", scrub: true },
   });
+
+  // Para la intro: las primeras exposiciones se disparan una a una
+  function intro() {
+    const tl = gsap.timeline();
+    tl.call(() => {
+      frames.forEach(f => { f.style.opacity = LATENT; });
+      notes.forEach(n => { gsap.set(n, { opacity: 0 }); });
+    });
+    for (let i = 0; i < SHOWN_AT_START; i++) {
+      tl.call(() => { paint(i); flash(frames[i]); }, null, .1 + i * .18);
+    }
+    return tl;
+  }
+
+  return { intro };
 }

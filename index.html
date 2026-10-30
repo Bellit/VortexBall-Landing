@@ -7,6 +7,14 @@
   <meta name="description" content="VORTEX es un balón de baloncesto conceptual con sensores dentro: mide el arco, la rotación y el ángulo de cada tiro, y la fuerza de cada bote.">
   <meta name="theme-color" content="#1c1611">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>
+    // La intro de revelado oculta el primer pantallazo hasta que arranca.
+    // Si algo falla, a los 4 s se muestra todo igualmente.
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.classList.add("intro");
+      window.introFailsafe = setTimeout(() => document.documentElement.classList.remove("intro"), 4000);
+    }
+  </script>
 </head>
 <body>
 
@@ -27,6 +35,13 @@
         <stop offset="0" class="stop-hi"/>
         <stop offset=".55" class="stop-mid"/>
         <stop offset="1" class="stop-lo"/>
+      </radialGradient>
+      <!-- halo del flash: luz cálida que se abre detrás de cada exposición -->
+      <radialGradient id="halo">
+        <stop offset="0" stop-color="#fff1dc" stop-opacity=".85"/>
+        <stop offset=".3" stop-color="#ffb27a" stop-opacity=".5"/>
+        <stop offset=".65" stop-color="#e2591f" stop-opacity=".16"/>
+        <stop offset="1" stop-color="#e2591f" stop-opacity="0"/>
       </radialGradient>
       <clipPath id="ballClip"><circle r="30"/></clipPath>
       <symbol id="ball" viewBox="-32 -32 64 64" overflow="visible">
@@ -295,7 +310,7 @@
         <svg viewBox="-62 -38 124 92" role="img" aria-label="El balón apoyado en el suelo; diámetro 238 milímetros">
           <g id="finishGhosts"></g>
           <ellipse cx="0" cy="30.5" rx="24" ry="2.4" class="contact"/>
-          <g id="finishBall"><use href="#ball" x="-32" y="-32" width="64" height="64"/></g>
+          <g id="finishBall" data-cx="0" data-cy="0" data-r="30"><use href="#ball" x="-32" y="-32" width="64" height="64"/></g>
           <line x1="-62" y1="30" x2="62" y2="30" class="floor thin"/>
           <g class="scalebar">
             <line x1="-30" y1="40" x2="30" y2="40"/>

@@ -10,12 +10,13 @@ export function initDribble({ reduce }) {
   const plate = document.getElementById("dribblePlate");
   const track = document.getElementById("dribbleTrack");
 
+  const impacts = [];   // el balón en el suelo de cada bote: ahí salta el flash
   const groups = BOUNCES.map((f, i) => {
     const x = 120 + i * STEP;
     const g = svgEl("g", {}, track);
     svgEl("path", { class: "path", d: `M${x - STEP / 2} ${HAND_Y} L${x} ${FLOOR_Y} L${x + STEP / 2} ${HAND_Y}` }, g);
     ballAt(g, x - STEP / 4, (HAND_Y + FLOOR_Y) / 2, 30, i * 20).setAttribute("opacity", .4);
-    ballAt(g, x, FLOOR_Y, 30, i * 20 + 10);
+    impacts.push(ballAt(g, x, FLOOR_Y, 30, i * 20 + 10));
     const w = 40 + f * .4;
     svgEl("line", { class: "imp", x1: x - w, y1: 472, x2: x + w, y2: 472 }, g);
     svgEl("text", { class: "lbl", x, y: 510, "text-anchor": "middle" }, g).textContent = `${f} N`;
@@ -39,7 +40,7 @@ export function initDribble({ reduce }) {
       const n = Math.round(self.progress * groups.length);
       if (n === shown) return;
       groups.forEach((g, i) => gsap.to(g, { opacity: i < n ? 1 : .12, duration: .35, ease: "expo.out" }));
-      if (n > shown) flash(groups[n - 1]);
+      if (n > shown) flash(impacts[n - 1]);
       shown = n;
     },
   });
