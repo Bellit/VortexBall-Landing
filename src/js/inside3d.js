@@ -41,7 +41,7 @@ export function initInside3D({ reduce }) {
   stage.querySelector("#explodePlate").after(canvas);
   section.classList.add("has-3d");
 
-  const { scene } = studioScene(renderer);
+  const { scene } = studioScene();
   const camera = new THREE.PerspectiveCamera(30, 1, .1, 100);
 
   // --- el conjunto ---
@@ -130,7 +130,7 @@ export function initInside3D({ reduce }) {
   function frame() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     if (w !== canvas._w || h !== canvas._h) {
-      renderer.setSize(w, h, false);
+      renderer.setSize(w, h);
       camera.aspect = w / h;
       canvas._w = w; canvas._h = h;
       overlay.setAttribute("viewBox", `0 0 ${w} ${h}`);

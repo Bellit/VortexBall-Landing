@@ -23,7 +23,7 @@ export function initMacro3D({ reduce }) {
   stage.prepend(canvas);
   section.classList.add("has-3d");
 
-  const { scene, key } = studioScene(renderer);
+  const { scene, key } = studioScene();
   const camera = new THREE.PerspectiveCamera(FOV, 1, .05, 50);
 
   // el único balón que usa la textura grande: es el que se ve de cerca
@@ -42,7 +42,7 @@ export function initMacro3D({ reduce }) {
   function frame() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     if (w !== canvas._w || h !== canvas._h) {
-      renderer.setSize(w, h, false);
+      renderer.setSize(w, h);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       canvas._w = w; canvas._h = h;

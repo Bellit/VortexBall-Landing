@@ -3,10 +3,11 @@ import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment
 import { gsap } from "gsap";
 
 // ---------------------------------------------------------------------------
-// El balón en 3D. Aquí vive lo compartido por todas las escenas: texturas del
-// cuero, material por acabado y luz de estudio. Además, `initBall3D` monta una
-// capa WebGL encima de las placas SVG (tiro, acabados y cierre): los balones SVG
-// siguen marcando posición, giro y opacidad, y esta capa dibuja un balón real.
+// El balón en 3D. Aquí vive lo compartido por todas las escenas: el renderer
+// único, las texturas del cuero, el material por acabado y la luz de estudio.
+// Además, `initBall3D` monta una capa 3D encima de las placas SVG que lo piden
+// (tiro, bote, sesión, acabados y cierre): los balones SVG siguen marcando
+// posición, giro y opacidad, y esta capa dibuja un balón real en su sitio.
 // ---------------------------------------------------------------------------
 
 // El material de cada acabado. Los colores (cuero y costura) no se escriben aquí:
@@ -41,8 +42,8 @@ const CURVE = .92;                // radio angular de las costuras curvas
 // propio contexto WebGL, así que subir la textura grande a todas sería tirar memoria.
 // Mientras "hi" no está lista, sus materiales usan la de "lo".
 const tiers = {
-  lo: { maps: null, cache: {}, current: null, mats: new Set(), renderers: new Set() },
-  hi: { maps: null, cache: {}, current: null, mats: new Set(), renderers: new Set() },
+  lo: { maps: null, cache: {}, current: null, mats: new Set() },
+  hi: { maps: null, cache: {}, current: null, mats: new Set() },
 };
 let finish = document.documentElement.dataset.finish || "cuero";
 
@@ -172,7 +173,7 @@ function refresh() {
       m.needsUpdate = true;
     });
     // subir ya las texturas nuevas a la GPU, no en el primer fotograma visible
-    tier.renderers.forEach(r => { r.initTexture(map); r.initTexture(bump); });
+    if (gl && tier.mats.size) { gl.initTexture(map); gl.initTexture(bump); }
   });
 }
 
@@ -188,23 +189,82 @@ async function setFinish(name) {
   refresh();
 }
 
-// Renderer con el tono de color de toda la web
+// ---------------------------------------------------------------------------
+// Un solo contexto WebGL para toda la página. Los navegadores limitan cuántos
+// puede haber a la vez (en móviles, a veces 8 o menos) y cierran los antiguos
+// sin avisar. Así que hay un único renderer fuera del DOM, y cada escena tiene
+// su propio <canvas> 2D en su sitio de la página: el renderer dibuja la escena
+// en una esquina de su lienzo y la copia a ese canvas. Las capas de cada
+// sección (texto encima, viñeteado...) quedan exactamente como estaban.
+// ---------------------------------------------------------------------------
+
+let gl = null;        // el renderer compartido
+let glW = 0, glH = 0; // su tamaño actual, en píxeles CSS
+
+function shared() {
+  if (gl) return gl;
+  gl = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+  gl.setPixelRatio(Math.min(devicePixelRatio, 2));
+  gl.toneMapping = THREE.ACESFilmicToneMapping;
+  gl.toneMappingExposure = 1.05;
+  gl.outputColorSpace = THREE.SRGBColorSpace;
+  gl.setClearColor(0x000000, 0);
+  gl.setScissorTest(true);
+  return gl;
+}
+
+// el lienzo compartido crece hasta la escena más grande que haya tenido que dibujar
+function ensureSize(w, h) {
+  if (w <= glW && h <= glH) return;
+  glW = Math.max(glW, w);
+  glH = Math.max(glH, h);
+  gl.setSize(glW, glH, false);
+}
+
+// Una "vista": se usa como un renderer normal (setSize, render, domElement),
+// pero dibuja con el renderer compartido y copia el resultado a su canvas
 export function createRenderer() {
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.domElement.setAttribute("aria-hidden", "true");
-  return renderer;
+  const r = shared();   // si no hay WebGL, esto lanza un error y la escena se queda en SVG
+  const canvas = document.createElement("canvas");
+  canvas.setAttribute("aria-hidden", "true");
+  const ctx = canvas.getContext("2d");
+  let w = 1, h = 1;
+  return {
+    domElement: canvas,
+    setSize(nw, nh) {
+      w = Math.max(1, nw); h = Math.max(1, nh);
+      const dpr = r.getPixelRatio();
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+    },
+    render(scene, camera) {
+      ensureSize(w, h);
+      r.setViewport(0, 0, w, h);
+      r.setScissor(0, 0, w, h);
+      r.render(scene, camera);
+      // WebGL dibuja desde abajo: la esquina usada es la inferior del lienzo
+      const src = r.domElement;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(src, 0, src.height - canvas.height, canvas.width, canvas.height,
+        0, 0, canvas.width, canvas.height);
+    },
+    initTexture: t => r.initTexture(t),
+    compileAsync: (scene, camera) => r.compileAsync(scene, camera),
+  };
+}
+
+// El entorno de luz (reflejos de estudio) se calcula una vez y lo comparten todas las escenas
+let environment = null;
+function studioEnvironment() {
+  if (!environment) environment = new THREE.PMREMGenerator(shared()).fromScene(new RoomEnvironment(), .04).texture;
+  return environment;
 }
 
 // Luz de estudio: principal cálida arriba a la izquierda, contorno por detrás a
 // la derecha para recortar la silueta sobre el fondo oscuro, y un relleno suave
-export function studioScene(renderer) {
+export function studioScene() {
   const scene = new THREE.Scene();
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
+  scene.environment = studioEnvironment();
   const key = new THREE.DirectionalLight("#fff1e0", 2.4);
   key.position.set(-1, 1.3, 1.6);
   const rim = new THREE.DirectionalLight("#ffd9b8", 3.2);
@@ -217,9 +277,7 @@ export function studioScene(renderer) {
 // Precalienta una escena al montarla: compila los shaders y sube las texturas.
 // Sin esto, la primera vez que una sección entra en pantalla el scroll da un tirón.
 export function warmUp(renderer, scene, camera, level = "lo") {
-  const tier = tiers[level];
-  tier.renderers.add(renderer);
-  const { map, bump } = texturesOf(tier);
+  const { map, bump } = texturesOf(tiers[level]);
   renderer.initTexture(map);
   renderer.initTexture(bump);
   renderer.compileAsync(scene, camera).catch(() => {});
@@ -255,7 +313,7 @@ function mountOverSvg(svg, selector) {
   svg.after(canvas);
   svg.classList.add("has-3d");
 
-  const { scene } = studioScene(renderer);
+  const { scene } = studioScene();
   // cámara ortográfica en píxeles del SVG: (0,0) arriba a la izquierda, y hacia abajo
   const camera = new THREE.OrthographicCamera(0, 1, 0, -1, -2000, 2000);
   camera.position.z = 1000;
@@ -268,7 +326,7 @@ function mountOverSvg(svg, selector) {
     const parent = canvas.parentElement.getBoundingClientRect();
     const w = Math.round(box.width), h = Math.round(box.height);
     if (w !== canvas._w || h !== canvas._h) {
-      renderer.setSize(w, h, false);
+      renderer.setSize(w, h);
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       camera.right = w; camera.bottom = -h;
