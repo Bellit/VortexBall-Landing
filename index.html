@@ -7,14 +7,21 @@
   <meta name="description" content="VORTEX es un balón de baloncesto conceptual con sensores dentro: mide el arco, la rotación y el ángulo de cada tiro, y la fuerza de cada bote.">
   <meta name="theme-color" content="#1c1611">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <script>
-    // La intro de revelado oculta el primer pantallazo hasta que arranca.
-    // Si algo falla, a los 4 s se muestra todo igualmente.
-    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      document.documentElement.classList.add("intro");
-      window.introFailsafe = setTimeout(() => document.documentElement.classList.remove("intro"), 4000);
-    }
-  </script>
+  <script src="/intro.js"></script>
+
+  <!-- vista previa al compartir el enlace (LinkedIn, WhatsApp, X...) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="VORTEX">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:title" content="VORTEX · El balón que mide cada tiro">
+  <meta property="og:description" content="Un balón de baloncesto conceptual con sensores dentro: mide el arco, la rotación y el ángulo de cada tiro, y la fuerza de cada bote.">
+  <meta property="og:url" content="%SITE_URL%/">
+  <meta property="og:image" content="%SITE_URL%/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Placa de cronofotografía: un balón naranja dibuja su parábola hacia el aro sobre fondo oscuro.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="%SITE_URL%/">
 </head>
 <body>
 

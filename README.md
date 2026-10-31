@@ -2,7 +2,7 @@
 
 Landing de un balón de baloncesto inteligente **ficticio**, hecha como pieza de portafolio. La página funciona como una placa de fotografía de movimiento: cada vez que haces scroll se "dispara" una exposición nueva del balón, con su destello, y los sensores van midiendo en pantalla.
 
-Todo lo visual se genera con código: no hay imágenes ni modelos 3D descargados.
+Todo lo visual se genera con código: no hay imágenes ni modelos 3D descargados. La única imagen, `public/og.jpg`, es una captura de la propia página para la vista previa al compartir el enlace.
 
 ## Arrancar
 
@@ -12,6 +12,14 @@ npm run dev      # servidor de desarrollo
 npm run build    # versión de producción en dist/
 npm run preview  # sirve dist/ para probarla
 ```
+
+## Publicar en Vercel
+
+La web es estática: Vercel ejecuta `npm run build` y sirve la carpeta `dist/`. Para publicarla, importa el repositorio en vercel.com (*Add New → Project*); `vercel.json` ya le dice qué hacer.
+
+- **Cabeceras de seguridad** (`vercel.json`). La más importante es la CSP: el navegador solo ejecuta scripts, estilos y fuentes que vengan del propio dominio. Por eso el script de la intro vive en `public/intro.js` y no dentro del HTML, y por eso Vite nunca incrusta las fuentes como `data:`. Las demás impiden que otra web meta esta en un iframe, que el navegador adivine tipos de archivo o que la página pida cámara o micrófono.
+- **`npm run preview` usa las mismas cabeceras**: `vite.config.js` las lee de `vercel.json`, así que si algo rompe la CSP se ve en local antes de publicar (aparece como error en la consola).
+- **Vista previa al compartir** (etiquetas `og:`). Necesitan la dirección completa de la imagen; `vite.config.js` cambia `%SITE_URL%` por la dirección de producción que da Vercel al compilar (`VERCEL_PROJECT_PRODUCTION_URL`).
 
 ## Qué hay en la página
 
